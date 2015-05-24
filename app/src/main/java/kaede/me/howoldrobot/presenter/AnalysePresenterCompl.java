@@ -109,7 +109,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
             int widthBitmap = bitmap.getWidth();
             int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2;
-            if (widthBitmap > widthBitmap) {
+            if (widthBitmap > widthMax) {
                 bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
             }
             saveImage(bitmap);
