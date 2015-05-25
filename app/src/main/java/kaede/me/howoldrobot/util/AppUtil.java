@@ -12,4 +12,10 @@ public class AppUtil {
         dm = context.getResources().getDisplayMetrics();
         return  dm.widthPixels;
     }
+
+	public static int getScreenHeight(Context context){
+		DisplayMetrics dm = new DisplayMetrics();
+		dm = context.getResources().getDisplayMetrics();
+		return  dm.heightPixels;
+	}
 }

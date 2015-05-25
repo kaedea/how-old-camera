@@ -14,4 +14,12 @@ public class BitmapUtil {
         return bitmapResized;
 
     }
+
+	public static Bitmap zoomBitmapToHeight(Bitmap bitmap, int height) {
+		Matrix matrix = new Matrix();
+		matrix.postScale((float) height / bitmap.getHeight(), (float) height / bitmap.getHeight());
+		Bitmap bitmapResized = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return bitmapResized;
+
+	}
 }

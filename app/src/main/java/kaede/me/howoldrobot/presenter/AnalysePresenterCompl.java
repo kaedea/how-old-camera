@@ -10,7 +10,11 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-
+import kaede.me.howoldrobot.Model.Face;
+import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.util.AppUtil;
+import kaede.me.howoldrobot.util.BitmapUtil;
+import kaede.me.howoldrobot.view.IPhotoView;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,12 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import kaede.me.howoldrobot.Model.Face;
-import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.util.AppUtil;
-import kaede.me.howoldrobot.util.BitmapUtil;
-import kaede.me.howoldrobot.view.IPhotoView;
 
 /**
  * Created by kaede on 2015/5/23.
@@ -108,9 +106,20 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(imageUri));
             //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
             int widthBitmap = bitmap.getWidth();
-            int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2;
-            if (widthBitmap > widthMax) {
-                bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+            int heightBitmap = bitmap.getHeight();
+            int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2 - context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo);
+            int heightMax = AppUtil.getScreenHeight(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_top) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2 - context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo);
+            if (widthBitmap > widthMax && heightBitmap > heightMax) {
+                float rateWidth = (float)widthBitmap/(float)widthMax;
+	            float rateHeight = (float)heightBitmap/(float)heightMax;
+	            if (rateWidth>=rateHeight)
+		            bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+	            else
+		            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+            }else if (widthBitmap > widthMax){
+	            bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+            }else if(heightBitmap>heightMax){
+	            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
             saveImage(bitmap);
             iPhotoView.onGetImage(bitmap, Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg");
