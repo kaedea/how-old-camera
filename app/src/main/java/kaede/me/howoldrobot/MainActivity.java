@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import kaede.me.howoldrobot.Model.Face;
-import kaede.me.howoldrobot.presenter.AnalysePresenterCompl;
-import kaede.me.howoldrobot.presenter.DrawPresenterCompl;
-import kaede.me.howoldrobot.presenter.IAnalysePresenter;
-import kaede.me.howoldrobot.presenter.IDrawPresenter;
+import kaede.me.howoldrobot.presenter.*;
 import kaede.me.howoldrobot.view.IPhotoView;
 import kaede.me.howoldrobot.widget.FaceImageView;
 
@@ -24,7 +21,6 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 	private IAnalysePresenter analysePresenter;
 	private IDrawPresenter    drawPresenter;
 	private FaceImageView     faceImageView;
-	private View              photoContainer;
 	private ProgressDialog progressDialog;
 
 
@@ -35,11 +31,10 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 
 		analysePresenter = new AnalysePresenterCompl(this);
 		drawPresenter = new DrawPresenterCompl(this, this);
-		photoContainer = this.findViewById(R.id.layout_main_photo);
 		faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
-
 		this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
 		this.findViewById(R.id.btn_main_gallery).setOnClickListener(this);
+		this.findViewById(R.id.btn_main_share).setOnClickListener(this);
 	}
 
 
@@ -89,6 +84,12 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
         case R.id.btn_main_gallery:
             analysePresenter.pickPhoto(this,AnalysePresenterCompl.TYPE_PICK_GALLERY);
             break;
+        case R.id.btn_main_share:
+	        new SharePresenterCompl(this).doShare(this,this.findViewById(android.R.id.content));
+	        /*Bitmap bit =BitmapUtil.getViewBitmap(this.findViewById(android.R.id.content));
+	        faceImageView.setImageBitmap(bit);
+	        BitmapUtil.saveBitmapToSd(bit,100,Environment.getExternalStorageDirectory() + "/screenshot.png");*/
+            break;
         default:
             break;
         }
@@ -108,8 +109,6 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
                 break;
         }
     }
-
-
 
 
 }

@@ -41,7 +41,7 @@ public class DrawPresenterCompl implements IDrawPresenter {
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
 
-            params.gravity = Gravity.TOP | Gravity.LEFT;
+            params.gravity = Gravity.TOP | Gravity.START;
 
     }
 

@@ -29,8 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -121,9 +119,8 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             }else if(heightBitmap>heightMax){
 	            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
-            saveImage(bitmap);
-            iPhotoView.onGetImage(bitmap, Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg");
-            //analysePresenter.doAnalyse(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "output_image_small.jpg");
+	        if (BitmapUtil.saveBitmapToSd(bitmap,100,Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg"))
+		        iPhotoView.onGetImage(bitmap, Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -166,25 +163,6 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
         iPhotoView.onGetFaces(faceList);
     }
 
-
-    public void saveImage(Bitmap bmp) {
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg");
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     class PostHandler extends AsyncTask<String, Void, String> {
