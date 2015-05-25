@@ -7,15 +7,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import android.widget.ImageView;
+import android.widget.TextView;
 import kaede.me.howoldrobot.Model.Face;
 import kaede.me.howoldrobot.R;
 import kaede.me.howoldrobot.view.IPhotoView;
 import kaede.me.howoldrobot.widget.FaceImageView;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by kaede on 2015/5/24.
@@ -66,6 +67,14 @@ public class DrawPresenterCompl implements IDrawPresenter {
             View ageIndicateView = LayoutInflater.from(activity.getApplicationContext()).inflate(
                     R.layout.item_age_indicator, null);
             if (ageIndicateView!=null){
+	            TextView tvAge = (TextView) ageIndicateView.findViewById(R.id.tv_ageindicator_age);
+	            tvAge.setText(String.valueOf(item.attributes.age));
+	            ImageView ivGender = (ImageView) ageIndicateView.findViewById(R.id.iv_ageindicator_gender);
+	            if (item.attributes.gender.equalsIgnoreCase("Male")){
+		            ivGender.setImageResource(R.drawable.icon_gende_male);
+	            }else if(item.attributes.gender.equalsIgnoreCase("Female")){
+		            ivGender.setImageResource(R.drawable.icon_gender_female);
+	            }
                 views.add(ageIndicateView);
                 windowManager.addView(ageIndicateView, params);
             }

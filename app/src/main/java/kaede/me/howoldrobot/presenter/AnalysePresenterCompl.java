@@ -163,7 +163,6 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             Face item = iterator.next();
             Log.d(TAG, "Face : " + item.toString());
         }
-
         iPhotoView.onGetFaces(faceList);
     }
 
@@ -241,6 +240,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+	        iPhotoView.showProgressDialog(true);
         }
 
         @Override
