@@ -7,13 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import kaede.me.howoldrobot.Model.Face;
 import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.model.Face;
 import kaede.me.howoldrobot.util.AppUtil;
 import kaede.me.howoldrobot.util.BitmapUtil;
+import kaede.me.howoldrobot.util.FileUtil;
 import kaede.me.howoldrobot.view.IPhotoView;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,15 +38,21 @@ import java.util.List;
  * Created by kaede on 2015/5/23.
  */
 public class AnalysePresenterCompl implements IAnalysePresenter {
-    private static final String TAG = "AnalysePresenterCompl";
-    public static final int TYPE_PICK_CAMERA = 0;
-    public static final int TYPE_PICK_GALLERY = 1;
+    private static final String TAG               = "AnalysePresenterCompl";
+    public static final  int    TYPE_PICK_CAMERA  = 0;
+    public static final  int    TYPE_PICK_GALLERY = 1;
+    private static final String OUTPUT_IMAGE_JPG  = "output_image.jpg";
+    private static final String OUTPUT_IMAGE_SMALL_JPG = "output_image_small.jpg";
     IPhotoView iPhotoView;
-    File outputImage;
+    File       appBaseDir;
     private Uri imageUri;
 
     public AnalysePresenterCompl(IPhotoView iPhotoView) {
         this.iPhotoView = iPhotoView;
+        File dir = new File(FileUtil.getSdpath() + File.separator + "Moe Studio");
+        dir.mkdir();
+        appBaseDir = new File(dir.getAbsolutePath() + File.separator + "How Old Robot");
+        appBaseDir.mkdir();
     }
 
     @Override
@@ -62,11 +69,16 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
 
     @Override
     public void pickPhoto(Activity activity, int type) {
+        File  outputImage;
         switch (type) {
             case TYPE_PICK_CAMERA:
                 Intent takePicture = new Intent("android.media.action.IMAGE_CAPTURE");
-                outputImage = new File(Environment.getExternalStorageDirectory(), "output_image.jpg");
-                outputImage.delete();
+                outputImage = new File(appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_JPG);
+                if (!outputImage.exists()) try {
+                    outputImage.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 imageUri = Uri.fromFile(outputImage);
                 //takePicture.putExtra("return-data", false);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -76,18 +88,12 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickPhoto.putExtra("crop", "true");//允许裁剪
-                outputImage = new File(Environment.getExternalStorageDirectory(),
-                        "output_image.jpg");
-
-                try {
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                    }
+                outputImage = new File(appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_JPG);
+                if (!outputImage.exists()) try {
                     outputImage.createNewFile();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 imageUri = Uri.fromFile(outputImage);
                 //takePicture.putExtra("return-data", false);
                 pickPhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -119,8 +125,9 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             }else if(heightBitmap>heightMax){
 	            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
-	        if (BitmapUtil.saveBitmapToSd(bitmap,100,Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg"))
-		        iPhotoView.onGetImage(bitmap, Environment.getExternalStorageDirectory() + File.separator + "output_image_small.jpg");
+            String imgPath = appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_SMALL_JPG;
+	        if (BitmapUtil.saveBitmapToSd(bitmap,100,imgPath))
+		        iPhotoView.onGetImage(bitmap, imgPath);
         } catch (Exception e) {
             e.printStackTrace();
         }

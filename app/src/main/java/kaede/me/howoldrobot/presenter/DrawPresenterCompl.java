@@ -2,17 +2,14 @@ package kaede.me.howoldrobot.presenter;
 
 import android.app.Activity;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-import kaede.me.howoldrobot.Model.Face;
+import kaede.me.howoldrobot.model.Face;
 import kaede.me.howoldrobot.R;
 import kaede.me.howoldrobot.view.IPhotoView;
 import kaede.me.howoldrobot.widget.FaceImageView;
+import kaede.me.howoldrobot.widget.AgeIndicatorLayout;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,35 +21,37 @@ import java.util.List;
 public class DrawPresenterCompl implements IDrawPresenter {
     List<View>views;
     IPhotoView iPhotoView;
-    private WindowManager windowManager;
-    private WindowManager.LayoutParams params;
+    /*private WindowManager windowManager;
+    private WindowManager.LayoutParams params;*/
 
     public DrawPresenterCompl(Activity activity,IPhotoView iPhotoView) {
         this.iPhotoView = iPhotoView;
         views = new ArrayList<>();
 
-            windowManager = activity.getWindowManager();
-
-
-            params = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.LAST_APPLICATION_WINDOW,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-
-            params.gravity = Gravity.TOP | Gravity.START;
+        /*windowManager = activity.getWindowManager();
+        params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.LAST_APPLICATION_WINDOW,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.TOP | Gravity.START;*/
 
     }
 
 
     @Override
-    public void drawFaces(Activity activity, FaceImageView faceImageView, List<Face> faces) {
+    public void drawFaces(AgeIndicatorLayout ageIndicatorLayout, FaceImageView faceImageView, List<Face> faces) {
         faceImageView.drawFaces(faces);
-        View photoContainer = activity.findViewById(R.id.layout_main_photo);
+        ageIndicatorLayout.drawAges(faces, (ageIndicatorLayout.getMeasuredWidth()-faceImageView.getMeasuredWidth())/2, (ageIndicatorLayout.getMeasuredHeight()-faceImageView.getMeasuredHeight())/2);
+
+
+        //使用WindowManager显示AgeIndicator
+        /*View photoContainer = activity.findViewById(R.id.layout_main_photo);
+        *//* 获取状态栏高度
         Rect frame = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-        //int statusBarHeight = frame.top;
+        int statusBarHeight = frame.top;*//*
         int x_center = photoContainer.getMeasuredWidth()/2;
         int y_center = photoContainer.getMeasuredHeight()/2;
         int x = x_center - faceImageView.getMeasuredWidth()/2 + activity.getResources().getDimensionPixelSize(R.dimen.margin_main_left);
@@ -78,16 +77,16 @@ public class DrawPresenterCompl implements IDrawPresenter {
                 views.add(ageIndicateView);
                 windowManager.addView(ageIndicateView, params);
             }
-        }
+        }*/
     }
 
     @Override
     public void clearViews() {
-        Iterator<View> iterator = views.iterator();
+        /*Iterator<View> iterator = views.iterator();
         while (iterator.hasNext()){
             View view = iterator.next();
             windowManager.removeViewImmediate(view);
         }
-        views.clear();
+        views.clear();*/
     }
 }

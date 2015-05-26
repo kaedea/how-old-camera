@@ -1,9 +1,8 @@
 package kaede.me.howoldrobot.util;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.PixelFormat;
+import android.graphics.*;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -35,6 +34,13 @@ public class BitmapUtil {
 
 	public static Boolean saveBitmapToSd(Bitmap bitmap,int quality,String path) {
 		File imagePath = new File(path);
+		if (!imagePath.exists()) try {
+			imagePath.createNewFile();
+		} catch (IOException e) {
+			Log.e(TAG,"[kaede] Create file fail!");
+			e.printStackTrace();
+			return false;
+		}
 		if (imagePath.delete()){
 			FileOutputStream fos;
 			try {
@@ -59,6 +65,40 @@ public class BitmapUtil {
 		view.invalidate();
 		rootView.setDrawingCacheEnabled(true);
 		return rootView.getDrawingCache();
+	}
+
+	public static Bitmap getBitmapFromView(View v,Boolean isUseDrawingCache) {
+		if (v.getMeasuredHeight()<=0||v.getMeasuredWidth()<=0){
+			// Either this
+			//int specWidth = View.MeasureSpec.makeMeasureSpec(parentWidth, View.MeasureSpec.AT_MOST);// Or this
+			int specWidth = View.MeasureSpec.makeMeasureSpec(0 /* any */, View.MeasureSpec.UNSPECIFIED);
+			int specHeight = View.MeasureSpec.makeMeasureSpec(0 /* any */, View.MeasureSpec.UNSPECIFIED);
+			v.measure(specWidth, specHeight);
+			int questionWidth = v.getMeasuredWidth();
+			int questionHeight = v.getMeasuredHeight();
+			Log.d(TAG, "[kaede][getBitmapFromView] questionWidth = " + questionWidth + " questionHeight=" + questionHeight);
+			v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+		}
+		return getBitmapFromVisiableView(v, isUseDrawingCache);
+	}
+
+	private static Bitmap getBitmapFromVisiableView(View view,Boolean isUseDrawingCache){
+		if (isUseDrawingCache){
+			View rootView = view.getRootView();
+			view.invalidate();
+			rootView.setDrawingCacheEnabled(true);
+			return rootView.getDrawingCache();
+		}
+		Bitmap b = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+		Canvas c = new Canvas(b);
+		Drawable bgDrawable =view.getBackground();
+		if (bgDrawable!=null)
+			bgDrawable.draw(c);
+		//else c.drawColor(Color.TRANSPARENT);
+		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+		view.draw(c);
+		return b;
+
 	}
 
 	public static Bitmap getScreenshot(Context context){

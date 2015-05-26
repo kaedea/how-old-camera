@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.Model;
+package kaede.me.howoldrobot.model;
 
 public class FaceRectangle{
     public int left;

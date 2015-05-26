@@ -1,21 +1,31 @@
 package kaede.me.howoldrobot.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import kaede.me.howoldrobot.Model.Face;
+import android.widget.TextView;
+import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.model.Face;
+import kaede.me.howoldrobot.util.BitmapUtil;
 
 /**
  * Created by kaede on 2015/5/23.
  */
 public class FaceImageView extends ImageView{
+    private static final String TAG = "FaceImageView";
     Boolean isDrawFace = false;
     List<Face> faces;
     private int width;
@@ -58,8 +68,8 @@ public class FaceImageView extends ImageView{
             Iterator<Face> iterator = faces.iterator();
             while (iterator.hasNext()){
                 Face item = iterator.next();
+                //draw rect
                 canvas.drawRect(item.faceRectangle.left,item.faceRectangle.top,item.faceRectangle.left+item.faceRectangle.width,item.faceRectangle.top+item.faceRectangle.height, paint);
-                //Log.d(TAG, "Face : " + item.toString());
             }
 
         }

@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot;
+package kaede.me.howoldrobot.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import kaede.me.howoldrobot.Model.Face;
+import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.model.Face;
 import kaede.me.howoldrobot.presenter.*;
 import kaede.me.howoldrobot.view.IPhotoView;
+import kaede.me.howoldrobot.widget.AgeIndicatorLayout;
 import kaede.me.howoldrobot.widget.FaceImageView;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 	private IDrawPresenter    drawPresenter;
 	private FaceImageView     faceImageView;
 	private ProgressDialog progressDialog;
+	private AgeIndicatorLayout ageIndicatorLayout;
 
 
 	@Override
@@ -32,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 		analysePresenter = new AnalysePresenterCompl(this);
 		drawPresenter = new DrawPresenterCompl(this, this);
 		faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
+		ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
 		this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
 		this.findViewById(R.id.btn_main_gallery).setOnClickListener(this);
 		this.findViewById(R.id.btn_main_share).setOnClickListener(this);
@@ -41,15 +45,15 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 	@Override
 	public void onGetFaces(List<Face> faces) {
 		showProgressDialog(false);
-		drawPresenter.drawFaces(this, faceImageView, faces);
+		drawPresenter.drawFaces(ageIndicatorLayout, faceImageView, faces);
 	}
 
 	@Override
 	public void onGetImage(Bitmap bitmap, String imgPath) {
 		faceImageView.clearFaces();
+		ageIndicatorLayout.clearAges();
         faceImageView.setImageBitmap(bitmap);
-        drawPresenter.clearViews();
-        faceImageView.requestLayout();
+        //drawPresenter.clearViews();
         analysePresenter.doAnalyse(imgPath);
     }
 
@@ -85,10 +89,8 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
             analysePresenter.pickPhoto(this,AnalysePresenterCompl.TYPE_PICK_GALLERY);
             break;
         case R.id.btn_main_share:
-	        new SharePresenterCompl(this).doShare(this,this.findViewById(android.R.id.content));
-	        /*Bitmap bit =BitmapUtil.getViewBitmap(this.findViewById(android.R.id.content));
-	        faceImageView.setImageBitmap(bit);
-	        BitmapUtil.saveBitmapToSd(bit,100,Environment.getExternalStorageDirectory() + "/screenshot.png");*/
+	       ISharePresenter sharePresenter  = new SharePresenterCompl(this);
+	        sharePresenter.doShare(this,this.findViewById(android.R.id.content));
             break;
         default:
             break;

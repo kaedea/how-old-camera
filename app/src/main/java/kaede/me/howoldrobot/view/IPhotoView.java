@@ -1,7 +1,7 @@
 package kaede.me.howoldrobot.view;
 
 import android.graphics.Bitmap;
-import kaede.me.howoldrobot.Model.Face;
+import kaede.me.howoldrobot.model.Face;
 
 import java.util.List;
 

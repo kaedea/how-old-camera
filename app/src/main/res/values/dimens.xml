@@ -5,8 +5,8 @@
     <dimen name="margin_main_top">5dp</dimen>
     <dimen name="margin_main_left">5dp</dimen>
     <dimen name="border_main_photo">3dp</dimen>
-    <dimen name="offset_main_photo">2dp</dimen>
+    <dimen name="offset_main_photo">20dp</dimen>
     <dimen name="common_actionbar_height">49dp</dimen>
-    <dimen name="indicator_height">40dp</dimen>
-    <dimen name="indicator_width">50dp</dimen>
+    <dimen name="indicator_height">50dp</dimen>
+    <dimen name="indicator_width">80dp</dimen>
 </resources>
