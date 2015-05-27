@@ -30,7 +30,7 @@ import kaede.me.howoldrobot.widget.FaceImageView;
 public class MainActivity extends ActionBarActivity implements IPhotoView, View.OnClickListener {
 
 	public static final  int ACTIVITY_REQUEST_CAMERA = 0;
-	private static final int ACTIVITY_REQUEST_GALLERY = 1;
+	public static final int ACTIVITY_REQUEST_GALLERY = 1;
 	private IAnalysePresenter analysePresenter;
 	private IDrawPresenter    drawPresenter;
 	private FaceImageView     faceImageView;

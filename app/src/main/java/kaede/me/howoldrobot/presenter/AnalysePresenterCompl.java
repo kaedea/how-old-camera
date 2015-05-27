@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import kaede.me.howoldrobot.activity.MainActivity;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -82,12 +83,16 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                 imageUri = Uri.fromFile(outputImage);
                 //takePicture.putExtra("return-data", false);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                activity.startActivityForResult(takePicture, 0);
+                try {
+                    activity.startActivityForResult(takePicture, MainActivity.ACTIVITY_REQUEST_CAMERA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    iPhotoView.toast(activity.getResources().getString(R.string.main_pick_camera_fail));
+                }
                 break;
             case TYPE_PICK_GALLERY:
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickPhoto.putExtra("crop", "true");//允许裁剪
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickPhoto.putExtra("crop", true);//允许裁剪
                 outputImage = new File(appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_JPG);
                 if (!outputImage.exists()) try {
                     outputImage.createNewFile();
@@ -97,7 +102,18 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                 imageUri = Uri.fromFile(outputImage);
                 //takePicture.putExtra("return-data", false);
                 pickPhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                activity.startActivityForResult(pickPhoto, 1);
+                try {
+                    activity.startActivityForResult(pickPhoto, MainActivity.ACTIVITY_REQUEST_GALLERY);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    pickPhoto.putExtra("crop", false);//不允许裁剪
+                    try {
+                        activity.startActivityForResult(pickPhoto, MainActivity.ACTIVITY_REQUEST_GALLERY);
+                    } catch (Throwable t) {
+                    	t.printStackTrace();
+                        iPhotoView.toast(activity.getResources().getString(R.string.main_pick_gallery_fail));
+                    }
+                }
                 break;
             default:
                 break;

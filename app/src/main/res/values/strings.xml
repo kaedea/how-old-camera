@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">HOW OLD CAMERA</string>
     <string name="main_loading">Analysing…</string>
+    <string name="main_pick_camera_fail">Sorry, open camera fail</string>
+    <string name="main_pick_gallery_fail">Sorry, pick photo fail</string>
     <string name="main_get_img_fail">Get image fail</string>
     <string name="main_analyze_fail">Sorry, analyze fail</string>
     <string name="main_analyze_no_face">Sorry, find no face</string>
