@@ -36,22 +36,35 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 	private FaceImageView     faceImageView;
 	private ProgressDialog progressDialog;
 	private AgeIndicatorLayout ageIndicatorLayout;
+    private View photoContainer;
 
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		analysePresenter = new AnalysePresenterCompl(this);
-		drawPresenter = new DrawPresenterCompl(this, this);
-        getSupportActionBar().setElevation(0);
-		faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
-		ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
-		this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
-		this.findViewById(R.id.btn_main_gallery).setOnClickListener(this);
-		this.findViewById(R.id.btn_main_share).setOnClickListener(this);
+        injectView();
+        setListener();
+        init();
 	}
+
+    private void injectView(){
+        faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
+        ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
+        photoContainer = this.findViewById(R.id.layout_main_photo);
+    }
+
+    private void setListener() {
+        this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
+        this.findViewById(R.id.btn_main_gallery).setOnClickListener(this);
+        this.findViewById(R.id.btn_main_share).setOnClickListener(this);
+    }
+
+    private void init() {
+        analysePresenter = new AnalysePresenterCompl(this);
+        drawPresenter = new DrawPresenterCompl(this, this);
+        getSupportActionBar().setElevation(0);
+    }
 
 
 	@Override
@@ -100,8 +113,13 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
     }
 
     @Override
+    public View getPhotoContainer() {
+        return photoContainer;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -124,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
             break;
         case R.id.btn_main_share:
 	       ISharePresenter sharePresenter  = new SharePresenterCompl(this);
-	        sharePresenter.doShare(this,this.findViewById(android.R.id.content));
+	        sharePresenter.doShare(this, this.findViewById(android.R.id.content));
             break;
         default:
             break;

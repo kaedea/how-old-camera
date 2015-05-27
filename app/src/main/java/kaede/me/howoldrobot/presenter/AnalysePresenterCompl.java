@@ -111,8 +111,8 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
             int widthBitmap = bitmap.getWidth();
             int heightBitmap = bitmap.getHeight();
-            int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2 - context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo);
-            int heightMax = AppUtil.getScreenHeight(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_top) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)) * 2 - context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo);
+            int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
+            int heightMax = iPhotoView.getPhotoContainer().getHeight() - (context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
             if (widthBitmap > widthMax && heightBitmap > heightMax) {
                 float rateWidth = (float)widthBitmap/(float)widthMax;
 	            float rateHeight = (float)heightBitmap/(float)heightMax;
@@ -126,7 +126,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
 	            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
             String imgPath = appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_SMALL_JPG;
-	        if (BitmapUtil.saveBitmapToSd(bitmap,100,imgPath))
+	        if (BitmapUtil.saveBitmapToSd(bitmap,80,imgPath))
 		        iPhotoView.onGetImage(bitmap, imgPath);
         } catch (Exception e) {
             iPhotoView.toast(context.getResources().getString(R.string.main_get_img_fail));

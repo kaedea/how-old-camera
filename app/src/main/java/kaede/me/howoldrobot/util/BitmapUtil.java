@@ -19,6 +19,7 @@ public class BitmapUtil {
 	private static final String TAG = "BitmapUtil";
 
 	public static Bitmap zoomBitmapToWidth(Bitmap bitmap, int width) {
+		Log.e(TAG,"[kaede][zoomBitmapToWidth] width="+width);
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) width / bitmap.getWidth(), (float) width / bitmap.getWidth());
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -26,6 +27,7 @@ public class BitmapUtil {
     }
 
 	public static Bitmap zoomBitmapToHeight(Bitmap bitmap, int height) {
+		Log.e(TAG,"[kaede][zoomBitmapToHeight] height="+height);
 		Matrix matrix = new Matrix();
 		matrix.postScale((float) height / bitmap.getHeight(), (float) height / bitmap.getHeight());
 		return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -45,7 +47,7 @@ public class BitmapUtil {
 			FileOutputStream fos;
 			try {
 				fos = new FileOutputStream(imagePath);
-				bitmap.compress(Bitmap.CompressFormat.PNG, quality, fos);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fos);
 				fos.flush();
 				fos.close();
 				return true;

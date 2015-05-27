@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import java.util.List;
 
+import android.view.View;
 import kaede.me.howoldrobot.model.Face;
 
 /**
@@ -14,4 +15,5 @@ public interface IPhotoView {
     public void onGetImage(Bitmap bitmap,String imgPath);
 	public void showProgressDialog(Boolean isShow);
     public void toast(String msg);
+    public View getPhotoContainer();
 }
