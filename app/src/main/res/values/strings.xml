@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">How Old Robot</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">HOW OLD CAMERA</string>
+    <string name="main_loading">Analysing…</string>
+    <string name="main_get_img_fail">Get image fail</string>
+    <string name="main_analyze_fail">Sorry, analyze fail</string>
+    <string name="main_analyze_no_face">Sorry, find no face</string>
+    <string name="main_tv_camera">CAMERA</string>
+    <string name="main_tv_gallery">GALLERY</string>
+    <string name="main_tv_share">SHARE</string>
+    <string name="action_star">Five Star</string>
+    <string name="action_web">Search Face</string>
+    <string name="action_feedback">Feedback</string>
 </resources>

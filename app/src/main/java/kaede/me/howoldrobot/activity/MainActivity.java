@@ -5,21 +5,32 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.List;
+
 import kaede.me.howoldrobot.R;
 import kaede.me.howoldrobot.model.Face;
-import kaede.me.howoldrobot.presenter.*;
+import kaede.me.howoldrobot.presenter.AnalysePresenterCompl;
+import kaede.me.howoldrobot.presenter.DrawPresenterCompl;
+import kaede.me.howoldrobot.presenter.IAnalysePresenter;
+import kaede.me.howoldrobot.presenter.IDrawPresenter;
+import kaede.me.howoldrobot.presenter.IOptionsPresenter;
+import kaede.me.howoldrobot.presenter.ISharePresenter;
+import kaede.me.howoldrobot.presenter.OptionsPresenter;
+import kaede.me.howoldrobot.presenter.SharePresenterCompl;
 import kaede.me.howoldrobot.view.IPhotoView;
 import kaede.me.howoldrobot.widget.AgeIndicatorLayout;
 import kaede.me.howoldrobot.widget.FaceImageView;
 
-import java.util.List;
-
 
 public class MainActivity extends ActionBarActivity implements IPhotoView, View.OnClickListener {
 
-	public static final  int ACTVITY_REQUEST_CAMMERA = 0;
-	private static final int ACTVITY_REQUEST_GALLERY = 1;
+	public static final  int ACTIVITY_REQUEST_CAMERA = 0;
+	private static final int ACTIVITY_REQUEST_GALLERY = 1;
 	private IAnalysePresenter analysePresenter;
 	private IDrawPresenter    drawPresenter;
 	private FaceImageView     faceImageView;
@@ -34,6 +45,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 
 		analysePresenter = new AnalysePresenterCompl(this);
 		drawPresenter = new DrawPresenterCompl(this, this);
+        getSupportActionBar().setElevation(0);
 		faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
 		ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
 		this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
@@ -45,7 +57,13 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 	@Override
 	public void onGetFaces(List<Face> faces) {
 		showProgressDialog(false);
-		drawPresenter.drawFaces(ageIndicatorLayout, faceImageView, faces);
+        if (faces==null){
+            toast(getResources().getString(R.string.main_analyze_fail));
+        }else if (faces.size()<=0){
+            toast(getResources().getString(R.string.main_analyze_no_face));
+        }else {
+            drawPresenter.drawFaces(ageIndicatorLayout, faceImageView, faces);
+        }
 	}
 
 	@Override
@@ -53,7 +71,6 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 		faceImageView.clearFaces();
 		ageIndicatorLayout.clearAges();
         faceImageView.setImageBitmap(bitmap);
-        //drawPresenter.clearViews();
         analysePresenter.doAnalyse(imgPath);
     }
 
@@ -64,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(false);
 			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.setMessage("Loading...");
+			progressDialog.setMessage(getResources().getString(R.string.main_loading));
 		}
 		if (isShow){
 			if (!progressDialog.isShowing())
@@ -77,8 +94,25 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 
 	}
 
+    @Override
+    public void toast(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        IOptionsPresenter optionsPresenter = new OptionsPresenter();
+        optionsPresenter.onOptionsItemClick(this,item.getItemId());
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onClick(View v) {
 
         switch(v.getId()) {
@@ -101,8 +135,8 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
-            case ACTVITY_REQUEST_CAMMERA:
-            case ACTVITY_REQUEST_GALLERY:
+            case ACTIVITY_REQUEST_CAMERA:
+            case ACTIVITY_REQUEST_GALLERY:
                 if(resultCode==RESULT_OK){
                     analysePresenter.getImage(this,data);
                 }

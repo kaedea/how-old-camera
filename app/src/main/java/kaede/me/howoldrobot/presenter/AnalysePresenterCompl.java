@@ -9,12 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
-import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.model.Face;
-import kaede.me.howoldrobot.util.AppUtil;
-import kaede.me.howoldrobot.util.BitmapUtil;
-import kaede.me.howoldrobot.util.FileUtil;
-import kaede.me.howoldrobot.view.IPhotoView;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -31,8 +26,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.model.Face;
+import kaede.me.howoldrobot.util.AppUtil;
+import kaede.me.howoldrobot.util.BitmapUtil;
+import kaede.me.howoldrobot.util.FileUtil;
+import kaede.me.howoldrobot.view.IPhotoView;
 
 /**
  * Created by kaede on 2015/5/23.
@@ -62,7 +63,6 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             Log.w(TAG, "Image Not Exists!");
             return;
         }
-
         postRequest(imgPath);
 
     }
@@ -129,6 +129,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
 	        if (BitmapUtil.saveBitmapToSd(bitmap,100,imgPath))
 		        iPhotoView.onGetImage(bitmap, imgPath);
         } catch (Exception e) {
+            iPhotoView.toast(context.getResources().getString(R.string.main_get_img_fail));
             e.printStackTrace();
         }
     }
@@ -138,6 +139,10 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     }
 
     private void parserJson(String string) {
+        if (string == null) {
+            iPhotoView.onGetFaces(null);
+            return;
+        }
         List<Face> faceList = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(string);
@@ -162,11 +167,11 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             e.printStackTrace();
         }
 
-        Iterator<Face> iterator = faceList.iterator();
+        /*Iterator<Face> iterator = faceList.iterator();
         while (iterator.hasNext()) {
             Face item = iterator.next();
             Log.d(TAG, "Face : " + item.toString());
-        }
+        }*/
         iPhotoView.onGetFaces(faceList);
     }
 
@@ -208,13 +213,10 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                     String str1 = result.replaceAll("\\\\", "");
                     String str2 = str1.replaceAll("rn", "");
                     String json = str2.substring(str2.indexOf("\"Faces\":[") + 8, str2.lastIndexOf("]") + 1);
+                    resEntity.consumeContent();
                     Log.d(TAG, json);
                     return json;
                 }
-                if (resEntity != null) {
-                    resEntity.consumeContent();
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -231,11 +233,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s == null) {
-                //Fail
-            } else {
-                parserJson(s);
-            }
+            parserJson(s);
         }
     }
 }
