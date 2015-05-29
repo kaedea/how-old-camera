@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.model;
+package kaede.me.howoldrobot.analyse.model;
 
 public class Attributes{
     @Override

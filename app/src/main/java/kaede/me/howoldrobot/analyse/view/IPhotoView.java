@@ -1,11 +1,11 @@
-package kaede.me.howoldrobot.view;
+package kaede.me.howoldrobot.analyse.view;
 
 import android.graphics.Bitmap;
 
 import java.util.List;
 
 import android.view.View;
-import kaede.me.howoldrobot.model.Face;
+import kaede.me.howoldrobot.analyse.model.Face;
 
 /**
  * Created by kaede on 2015/5/23.

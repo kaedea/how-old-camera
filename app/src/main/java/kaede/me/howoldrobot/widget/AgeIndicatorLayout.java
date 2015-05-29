@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.model.Face;
+import kaede.me.howoldrobot.analyse.model.Face;
 import kaede.me.howoldrobot.util.BitmapUtil;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 

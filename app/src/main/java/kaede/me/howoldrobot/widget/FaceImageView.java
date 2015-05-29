@@ -1,25 +1,16 @@
 package kaede.me.howoldrobot.widget;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Environment;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import android.widget.TextView;
-import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.model.Face;
-import kaede.me.howoldrobot.util.BitmapUtil;
+import kaede.me.howoldrobot.analyse.model.Face;
 
 /**
  * Created by kaede on 2015/5/23.

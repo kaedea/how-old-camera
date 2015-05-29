@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.presenter;
+package kaede.me.howoldrobot.analyse.presenter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import kaede.me.howoldrobot.util.BitmapUtil;
 import kaede.me.howoldrobot.util.FileUtil;
-import kaede.me.howoldrobot.view.IPhotoView;
+import kaede.me.howoldrobot.analyse.view.IPhotoView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

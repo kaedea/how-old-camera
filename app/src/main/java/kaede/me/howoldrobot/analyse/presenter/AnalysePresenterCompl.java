@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.presenter;
+package kaede.me.howoldrobot.analyse.presenter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import kaede.me.howoldrobot.activity.MainActivity;
+import kaede.me.howoldrobot.analyse.activity.MainActivity;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,11 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.model.Face;
+import kaede.me.howoldrobot.analyse.model.Face;
 import kaede.me.howoldrobot.util.AppUtil;
 import kaede.me.howoldrobot.util.BitmapUtil;
 import kaede.me.howoldrobot.util.FileUtil;
-import kaede.me.howoldrobot.view.IPhotoView;
+import kaede.me.howoldrobot.analyse.view.IPhotoView;
 
 /**
  * Created by kaede on 2015/5/23.
@@ -92,7 +92,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                 break;
             case TYPE_PICK_GALLERY:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickPhoto.putExtra("crop", true);//允许裁剪
+                pickPhoto.putExtra("crop", "true");//允许裁剪
                 outputImage = new File(appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_JPG);
                 if (!outputImage.exists()) try {
                     outputImage.createNewFile();

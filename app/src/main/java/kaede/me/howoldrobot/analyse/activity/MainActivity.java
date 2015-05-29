@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.activity;
+package kaede.me.howoldrobot.analyse.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,16 +13,16 @@ import android.widget.Toast;
 import java.util.List;
 
 import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.model.Face;
-import kaede.me.howoldrobot.presenter.AnalysePresenterCompl;
-import kaede.me.howoldrobot.presenter.DrawPresenterCompl;
-import kaede.me.howoldrobot.presenter.IAnalysePresenter;
-import kaede.me.howoldrobot.presenter.IDrawPresenter;
-import kaede.me.howoldrobot.presenter.IOptionsPresenter;
-import kaede.me.howoldrobot.presenter.ISharePresenter;
-import kaede.me.howoldrobot.presenter.OptionsPresenter;
-import kaede.me.howoldrobot.presenter.SharePresenterCompl;
-import kaede.me.howoldrobot.view.IPhotoView;
+import kaede.me.howoldrobot.analyse.model.Face;
+import kaede.me.howoldrobot.analyse.presenter.AnalysePresenterCompl;
+import kaede.me.howoldrobot.analyse.presenter.DrawPresenterCompl;
+import kaede.me.howoldrobot.analyse.presenter.IAnalysePresenter;
+import kaede.me.howoldrobot.analyse.presenter.IDrawPresenter;
+import kaede.me.howoldrobot.analyse.presenter.IOptionsPresenter;
+import kaede.me.howoldrobot.analyse.presenter.ISharePresenter;
+import kaede.me.howoldrobot.analyse.presenter.OptionsPresenterCompl;
+import kaede.me.howoldrobot.analyse.presenter.SharePresenterCompl;
+import kaede.me.howoldrobot.analyse.view.IPhotoView;
 import kaede.me.howoldrobot.widget.AgeIndicatorLayout;
 import kaede.me.howoldrobot.widget.FaceImageView;
 
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
     private void init() {
         analysePresenter = new AnalysePresenterCompl(this);
         drawPresenter = new DrawPresenterCompl(this, this);
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setElevation(0);//取消Actionbar阴影（5.0后生效）
     }
 
 
@@ -125,7 +125,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        IOptionsPresenter optionsPresenter = new OptionsPresenter();
+        IOptionsPresenter optionsPresenter = new OptionsPresenterCompl();
         optionsPresenter.onOptionsItemClick(this,item.getItemId());
         return super.onOptionsItemSelected(item);
     }

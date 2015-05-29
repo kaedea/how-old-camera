@@ -1,4 +1,4 @@
-package kaede.me.howoldrobot.model;
+package kaede.me.howoldrobot.analyse.model;
 
 /**
  * Created by kaede on 2015/5/23.

@@ -1,18 +1,14 @@
-package kaede.me.howoldrobot.presenter;
+package kaede.me.howoldrobot.analyse.presenter;
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
-import kaede.me.howoldrobot.model.Face;
-import kaede.me.howoldrobot.R;
-import kaede.me.howoldrobot.view.IPhotoView;
+
+import kaede.me.howoldrobot.analyse.model.Face;
+import kaede.me.howoldrobot.analyse.view.IPhotoView;
 import kaede.me.howoldrobot.widget.FaceImageView;
 import kaede.me.howoldrobot.widget.AgeIndicatorLayout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
