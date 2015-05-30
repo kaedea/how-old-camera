@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.util.AppUtil;
 import kaede.me.howoldrobot.util.NavigationUtil;
 
 /**
@@ -15,6 +16,7 @@ public class OptionsPresenterCompl implements IOptionsPresenter {
     public void onOptionsItemClick(Context context, int id) {
         switch(id) {
         case R.id.action_star:
+            NavigationUtil.naviToMarket(context, AppUtil.getpackageName(context));
             break;
         case R.id.action_web:
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://how-old.net"));
