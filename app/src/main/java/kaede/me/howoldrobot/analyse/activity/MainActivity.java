@@ -84,6 +84,8 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
 		faceImageView.clearFaces();
 		ageIndicatorLayout.clearAges();
         faceImageView.setImageBitmap(bitmap);
+        this.findViewById(R.id.layout_main_introduce).setVisibility(View.GONE);
+        this.findViewById(R.id.layout_main_border).setBackgroundResource(R.color.orange_500);
         analysePresenter.doAnalyse(imgPath);
     }
 
@@ -141,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
             analysePresenter.pickPhoto(this,AnalysePresenterCompl.TYPE_PICK_GALLERY);
             break;
         case R.id.btn_main_share:
-	       ISharePresenter sharePresenter  = new SharePresenterCompl(this);
+	        ISharePresenter sharePresenter  = new SharePresenterCompl(this);
 	        sharePresenter.doShare(this, this.findViewById(android.R.id.content));
             break;
         default:

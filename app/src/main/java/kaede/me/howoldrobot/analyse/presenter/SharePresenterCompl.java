@@ -6,12 +6,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
-import kaede.me.howoldrobot.util.BitmapUtil;
-import kaede.me.howoldrobot.util.FileUtil;
-import kaede.me.howoldrobot.analyse.view.IPhotoView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import kaede.me.howoldrobot.R;
+import kaede.me.howoldrobot.analyse.view.IPhotoView;
+import kaede.me.howoldrobot.util.BitmapUtil;
+import kaede.me.howoldrobot.util.FileUtil;
 
 /**
  * Created by kaede on 2015/5/25.
@@ -40,11 +42,15 @@ public class SharePresenterCompl implements ISharePresenter {
 			share.setType("image/jpeg");
 			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			b.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-			String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),
-					b, "Title", null);
+			String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),b, "Share Image", "How Old Camera's Share Image");
 			Uri imageUri =  Uri.parse(path);
 			share.putExtra(Intent.EXTRA_STREAM, imageUri);
-			context.startActivity(Intent.createChooser(share, "Select"));
-		}
+            try {
+                context.startActivity(Intent.createChooser(share, context.getResources().getString(R.string.share_select_title)));
+            } catch (Exception e) {
+                iPhotoView.toast(context.getResources().getString(R.string.share_fail));
+                e.printStackTrace();
+            }
+        }
 	}
 }

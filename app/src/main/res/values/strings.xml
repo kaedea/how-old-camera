@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HOW OLD CAMERA</string>
+
     <string name="main_loading">Analysing…</string>
     <string name="main_pick_camera_fail">Sorry, open camera fail</string>
     <string name="main_pick_gallery_fail">Sorry, pick photo fail</string>
@@ -9,14 +10,17 @@
     <string name="main_tv_camera">CAMERA</string>
     <string name="main_tv_gallery">GALLERY</string>
     <string name="main_tv_share">SHARE</string>
+    <string name="main_introduce_first">①  pick a photo from camera or gallery</string>
+    <string name="main_introduce_second">②  wait for analyse to get age and gender</string>
+    <string name="main_introduce_third">③  don\'t forget to share with your peers</string>
+
     <string name="action_star">Five Star</string>
     <string name="action_web">Search Face</string>
     <string name="action_feedback">Feedback</string>
-    <string name="title_activity_browser">Search</string>
+
+    <string name="share_fail">Sorry, can\'t find Share APP</string>
+    <string name="share_select_title">Select APP</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
