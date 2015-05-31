@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">年龄相机</string>
+    <string name="app_label">年龄相机</string>
+
+    <string name="main_loading">分析中…</string>
+    <string name="main_pick_camera_fail">抱歉，无法打开相机</string>
+    <string name="main_pick_gallery_fail">抱歉，无法打开图库</string>
+    <string name="main_get_img_fail">获取图片失败</string>
+    <string name="main_analyze_fail">抱歉，图片分析失败</string>
+    <string name="main_analyze_no_face">没有找到脸蛋哦</string>
+    <string name="main_tv_camera">相机</string>
+    <string name="main_tv_gallery">图库</string>
+    <string name="main_tv_share">分享</string>
+    <string name="main_introduce_first">①  从相机或者图库获取一张图片</string>
+    <string name="main_introduce_second">②  会自动分析图片中脸蛋的性别年龄</string>
+    <string name="main_introduce_third">③  别忘了跟小伙伴们分享图片分析的结果</string>
+
+    <string name="action_star">5星好评</string>
+    <string name="action_web">搜索脸蛋</string>
+    <string name="action_feedback">反馈</string>
+
+    <string name="share_fail">抱歉，没有找到分享APP</string>
+    <string name="share_select_title">选择APP</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+</resources>

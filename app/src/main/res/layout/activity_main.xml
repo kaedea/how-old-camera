@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     >
-                <kaede.me.howoldrobot.widget.FaceImageView
+                <me.kaede.howoldrobot.widget.FaceImageView
                         android:layout_margin="@dimen/border_main_photo"
                         android:id="@+id/iv_main_face"
                         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             </LinearLayout>
 
         </LinearLayout>
-        <kaede.me.howoldrobot.widget.AgeIndicatorLayout
+        <me.kaede.howoldrobot.widget.AgeIndicatorLayout
 
                 android:background="#00000000"
                 android:id="@+id/layout_main_age"
@@ -96,7 +96,7 @@
                    android:ellipsize="marquee"
                    android:text="@string/main_introduce_third"/>
            </LinearLayout>
-        </kaede.me.howoldrobot.widget.AgeIndicatorLayout>
+        </me.kaede.howoldrobot.widget.AgeIndicatorLayout>
         <LinearLayout
                 android:layout_marginLeft="@dimen/margin_main_left"
                 android:layout_marginRight="@dimen/margin_main_left"

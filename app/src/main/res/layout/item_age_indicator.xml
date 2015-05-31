@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<kaede.me.howoldrobot.widget.AgeIndicatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.kaede.howoldrobot.widget.AgeIndicatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="wrap_content" android:gravity="center"
     android:layout_height="wrap_content" android:background="@drawable/bg_indicator"
     >
@@ -24,4 +24,4 @@
             android:layout_height="wrap_content" />
         </LinearLayout>
 
-</kaede.me.howoldrobot.widget.AgeIndicatorLayout>
+</me.kaede.howoldrobot.widget.AgeIndicatorLayout>

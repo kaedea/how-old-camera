@@ -5,11 +5,11 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "kaede.me.howoldrobot"
+        applicationId "me.kaede.howoldrobot"
         minSdkVersion 10
         targetSdkVersion 16
-        versionCode 1
-        versionName "1.0"
+        versionCode 20
+        versionName "0.2.0"
     }
     buildTypes {
         release {
