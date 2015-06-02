@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import java.util.List;
@@ -15,8 +18,10 @@ import java.util.List;
 import me.kaede.howoldrobot.R;
 import me.kaede.howoldrobot.analyse.model.Face;
 import me.kaede.howoldrobot.analyse.presenter.AnalysePresenterCompl;
+import me.kaede.howoldrobot.analyse.presenter.AnimationPresenterCompl;
 import me.kaede.howoldrobot.analyse.presenter.DrawPresenterCompl;
 import me.kaede.howoldrobot.analyse.presenter.IAnalysePresenter;
+import me.kaede.howoldrobot.analyse.presenter.IAnimationPresenter;
 import me.kaede.howoldrobot.analyse.presenter.IDrawPresenter;
 import me.kaede.howoldrobot.analyse.presenter.IOptionsPresenter;
 import me.kaede.howoldrobot.analyse.presenter.ISharePresenter;
@@ -69,8 +74,10 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
         } catch (Exception e) {
             e.printStackTrace();
         }
+        IAnimationPresenter animationPresenter = new AnimationPresenterCompl();
+        animationPresenter.doLogoAnimation(findViewById(R.id.iv_main_introduce_logo));
+        animationPresenter.doIntroduceAnimation(findViewById(R.id.layout_main_introduce_text));
     }
-
 
 	@Override
 	public void onGetFaces(List<Face> faces) {

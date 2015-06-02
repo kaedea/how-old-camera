@@ -8,8 +8,8 @@ android {
         applicationId "me.kaede.howoldrobot"
         minSdkVersion 10
         targetSdkVersion 16
-        versionCode 20
-        versionName "0.2.0"
+        versionCode 21
+        versionName "0.2.1"
     }
     buildTypes {
         release {

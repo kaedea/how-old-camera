@@ -64,37 +64,45 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent">
                <ImageView
+                   android:id="@+id/iv_main_introduce_logo"
                    android:layout_margin="@dimen/border_main_photo"
-                   android:src="@drawable/icon_how_old"
+                   android:src="@drawable/icon_how_old_02"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"/>
-               <TextView
-                   android:layout_marginTop="30dp"
-                   android:textSize="14sp"
-                   android:textColor="@color/orange_500"
+               <LinearLayout
+                   android:id="@+id/layout_main_introduce_text"
+                   android:gravity="center"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:singleLine="true"
-                   android:ellipsize="marquee"
-                   android:text="@string/main_introduce_first"/>
-               <TextView
-                   android:layout_marginTop="2dp"
-                   android:textSize="14sp"
-                   android:textColor="@color/orange_500"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:singleLine="true"
-                   android:ellipsize="marquee"
-                   android:text="@string/main_introduce_second"/>
-               <TextView
-                   android:layout_marginTop="2dp"
-                   android:textSize="14sp"
-                   android:textColor="@color/orange_500"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:singleLine="true"
-                   android:ellipsize="marquee"
-                   android:text="@string/main_introduce_third"/>
+                   android:orientation="vertical">
+                   <TextView
+                       android:layout_marginTop="30dp"
+                       android:textSize="14sp"
+                       android:textColor="@color/orange_500"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:singleLine="true"
+                       android:ellipsize="marquee"
+                       android:text="@string/main_introduce_first"/>
+                   <TextView
+                       android:layout_marginTop="2dp"
+                       android:textSize="14sp"
+                       android:textColor="@color/orange_500"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:singleLine="true"
+                       android:ellipsize="marquee"
+                       android:text="@string/main_introduce_second"/>
+                   <TextView
+                       android:layout_marginTop="2dp"
+                       android:textSize="14sp"
+                       android:textColor="@color/orange_500"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:singleLine="true"
+                       android:ellipsize="marquee"
+                       android:text="@string/main_introduce_third"/>
+               </LinearLayout>
            </LinearLayout>
         </me.kaede.howoldrobot.widget.AgeIndicatorLayout>
         <LinearLayout
