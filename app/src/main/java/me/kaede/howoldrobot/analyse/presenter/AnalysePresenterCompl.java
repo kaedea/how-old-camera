@@ -8,13 +8,21 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Base64InputStream;
 import android.util.Log;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import me.kaede.howoldrobot.analyse.activity.MainActivity;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -25,7 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,7 +161,41 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     }
 
     private void postRequest(String imagePath) {
-        new PostHandler().execute(imagePath);
+
+        try {
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            params.put("data", new File(imagePath)); // Upload a File
+            //params.put("data", new Base64InputStream(new FileInputStream(imagePath),Base64.DEFAULT)); // Upload a File
+            params.put("isTest", "False");
+            Log.d(TAG, "do post ");
+            client.post("http://how-old.net/Home/Analyze?isTest=False", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    Log.d(TAG, "onSuccess: statusCode = " + statusCode);
+                    try {
+                        String string = new String(responseBody, "UTF-8");
+                        String str1 = string.replaceAll("\\\\", "");
+                        String str2 = str1.replaceAll("rn", "");
+                        String json = str2.substring(str2.indexOf("\"Faces\":[") + 8, str2.lastIndexOf("]") + 1);
+                        Log.d(TAG, "onSuccess: json = " + json);
+                        parserJson(json);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.d(TAG, "onFailure: statusCode = " + statusCode);
+                }
+            });
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //new PostHandler().execute(imagePath);
     }
 
     private void parserJson(String string) {
