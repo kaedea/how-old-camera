@@ -3,11 +3,11 @@
     <string name="app_label">HOW OLD</string>
 
     <string name="main_loading">Analysing…</string>
-    <string name="main_pick_camera_fail">Sorry, open camera fail</string>
-    <string name="main_pick_gallery_fail">Sorry, pick photo fail</string>
+    <string name="main_pick_camera_fail">Open camera fail</string>
+    <string name="main_pick_gallery_fail">Pick photo fail</string>
     <string name="main_get_img_fail">Get image fail</string>
-    <string name="main_analyze_fail">Sorry, analyze fail</string>
-    <string name="main_analyze_no_face">Sorry, find no face</string>
+    <string name="main_analyze_fail">Analyze fail</string>
+    <string name="main_analyze_no_face">Find no face</string>
     <string name="main_tv_camera">CAMERA</string>
     <string name="main_tv_gallery">GALLERY</string>
     <string name="main_tv_share">SHARE</string>
@@ -19,7 +19,7 @@
     <string name="action_web">Search Face</string>
     <string name="action_feedback">Feedback</string>
 
-    <string name="share_fail">Sorry, can\'t find Share APP</string>
+    <string name="share_fail">Can\'t find Share APP</string>
     <string name="share_select_title">Select APP</string>
 
     <string name="hello_world">Hello world!</string>
