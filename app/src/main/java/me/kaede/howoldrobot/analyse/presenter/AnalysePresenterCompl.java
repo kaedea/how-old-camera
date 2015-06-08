@@ -6,45 +6,30 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Base64InputStream;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import me.kaede.howoldrobot.analyse.activity.MainActivity;
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.kaede.howoldrobot.R;
+import me.kaede.howoldrobot.analyse.activity.MainActivity;
 import me.kaede.howoldrobot.analyse.model.Face;
+import me.kaede.howoldrobot.analyse.view.IPhotoView;
 import me.kaede.howoldrobot.util.AppUtil;
 import me.kaede.howoldrobot.util.BitmapUtil;
 import me.kaede.howoldrobot.util.FileUtil;
-import me.kaede.howoldrobot.analyse.view.IPhotoView;
 
 /**
  * Created by kaede on 2015/5/23.
@@ -58,6 +43,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     IPhotoView iPhotoView;
     File       appBaseDir;
     private Uri imageUri;
+    private AsyncHttpClient asyncHttpClient;
 
     public AnalysePresenterCompl(IPhotoView iPhotoView) {
         this.iPhotoView = iPhotoView;
@@ -161,15 +147,15 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     }
 
     private void postRequest(String imagePath) {
-
+        iPhotoView.showProgressDialog(true);
         try {
-            AsyncHttpClient client = new AsyncHttpClient();
+            if (asyncHttpClient==null)asyncHttpClient = new AsyncHttpClient();
             RequestParams params = new RequestParams();
             params.put("data", new File(imagePath)); // Upload a File
             //params.put("data", new Base64InputStream(new FileInputStream(imagePath),Base64.DEFAULT)); // Upload a File
             params.put("isTest", "False");
             Log.d(TAG, "do post ");
-            client.post("http://how-old.net/Home/Analyze?isTest=False", params, new AsyncHttpResponseHandler() {
+            asyncHttpClient.post("http://how-old.net/Home/Analyze?isTest=False", params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     Log.d(TAG, "onSuccess: statusCode = " + statusCode);
@@ -188,11 +174,13 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                     Log.d(TAG, "onFailure: statusCode = " + statusCode);
+                    parserJson(null);
                 }
             });
-            
+
         } catch (Exception e) {
             e.printStackTrace();
+            parserJson(null);
         }
 
         //new PostHandler().execute(imagePath);
@@ -237,7 +225,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
 
 
 
-    class PostHandler extends AsyncTask<String, Void, String> {
+    /*class PostHandler extends AsyncTask<String, Void, String> {
 
 
         @Override
@@ -295,5 +283,5 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             super.onPostExecute(s);
             parserJson(s);
         }
-    }
+    }*/
 }
