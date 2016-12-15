@@ -23,7 +23,8 @@
         <activity
             android:name="me.kaede.howoldrobot.analyse.activity.MainActivity"
             android:label="@string/app_label"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

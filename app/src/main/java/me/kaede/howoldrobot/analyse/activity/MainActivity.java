@@ -7,8 +7,10 @@ package me.kaede.howoldrobot.analyse.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,17 +35,18 @@ import me.kaede.howoldrobot.widget.AgeIndicatorLayout;
 import me.kaede.howoldrobot.widget.FaceImageView;
 
 
-public class MainActivity extends ActionBarActivity implements IPhotoView, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements IPhotoView, View.OnClickListener {
 
     public static final int ACTIVITY_REQUEST_CAMERA = 0;
     public static final int ACTIVITY_REQUEST_GALLERY = 1;
+
     private IAnalysePresenter analysePresenter;
     private IDrawPresenter drawPresenter;
     private FaceImageView faceImageView;
     private ProgressDialog progressDialog;
     private AgeIndicatorLayout ageIndicatorLayout;
     private View photoContainer;
-
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +58,27 @@ public class MainActivity extends ActionBarActivity implements IPhotoView, View.
     }
 
     private void injectView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
         ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
         photoContainer = this.findViewById(R.id.layout_main_photo);
     }
 
     private void setListener() {
-        this.findViewById(R.id.btn_main_camera).setOnClickListener(this);
-        this.findViewById(R.id.btn_main_gallery).setOnClickListener(this);
-        this.findViewById(R.id.btn_main_share).setOnClickListener(this);
+        findViewById(R.id.btn_main_camera).setOnClickListener(this);
+        findViewById(R.id.btn_main_gallery).setOnClickListener(this);
+        findViewById(R.id.btn_main_share).setOnClickListener(this);
     }
 
     private void init() {
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(getResources().getString(R.string.app_name));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.setElevation(0);
+        }
+
         analysePresenter = new AnalysePresenterCompl(this);
         drawPresenter = new DrawPresenterCompl(this, this);
-        try {
-            getSupportActionBar().setElevation(0);//取消Actionbar阴影（5.0后生效）
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         IAnimationPresenter animationPresenter = new AnimationPresenterCompl();
         animationPresenter.doLogoAnimation(findViewById(R.id.iv_main_introduce_logo));
         animationPresenter.doIntroduceAnimation(findViewById(R.id.layout_main_introduce_text));
