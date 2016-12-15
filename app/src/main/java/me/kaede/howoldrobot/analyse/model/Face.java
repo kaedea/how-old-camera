@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.analyse.model;
 
 /**
@@ -7,7 +11,8 @@ public class Face {
     public int faceId;
     public FaceRectangle faceRectangle;
     public Attributes attributes;
-    public  Face(){
+
+    public Face() {
         faceRectangle = new FaceRectangle();
         attributes = new Attributes();
     }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.analyse.presenter;
 
 import android.view.View;
@@ -12,10 +16,10 @@ public class AnimationPresenterCompl implements IAnimationPresenter {
     @Override
     public void doLogoAnimation(View view) {
         AnimationSet animationSet = new AnimationSet(false);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
         alphaAnimation.setDuration(1000);
         alphaAnimation.setFillAfter(true);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0f,0f,100f,0f);
+        TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, 100f, 0f);
         translateAnimation.setDuration(1000);
         translateAnimation.setFillAfter(true);
         animationSet.addAnimation(alphaAnimation);
@@ -25,7 +29,7 @@ public class AnimationPresenterCompl implements IAnimationPresenter {
 
     @Override
     public void doIntroduceAnimation(View view) {
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
         alphaAnimation.setDuration(500);
         alphaAnimation.setStartOffset(500);
         alphaAnimation.setFillAfter(true);

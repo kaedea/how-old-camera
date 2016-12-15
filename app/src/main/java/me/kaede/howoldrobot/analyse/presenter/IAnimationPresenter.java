@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.analyse.presenter;
 
 import android.view.View;
@@ -8,5 +12,6 @@ import android.view.View;
 public interface IAnimationPresenter {
 
     public void doLogoAnimation(View view);
+
     public void doIntroduceAnimation(View view);
 }

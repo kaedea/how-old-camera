@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.analyse.presenter;
 
 import android.app.Activity;
@@ -27,21 +31,21 @@ import me.kaede.howoldrobot.R;
 import me.kaede.howoldrobot.analyse.activity.MainActivity;
 import me.kaede.howoldrobot.analyse.model.Face;
 import me.kaede.howoldrobot.analyse.view.IPhotoView;
-import me.kaede.howoldrobot.util.AppUtil;
-import me.kaede.howoldrobot.util.BitmapUtil;
-import me.kaede.howoldrobot.util.FileUtil;
+import me.kaede.howoldrobot.utils.AppUtil;
+import me.kaede.howoldrobot.utils.BitmapUtil;
+import me.kaede.howoldrobot.utils.FileUtil;
 
 /**
  * Created by kaede on 2015/5/23.
  */
 public class AnalysePresenterCompl implements IAnalysePresenter {
-    private static final String TAG               = "AnalysePresenterCompl";
-    public static final  int    TYPE_PICK_CAMERA  = 0;
-    public static final  int    TYPE_PICK_GALLERY = 1;
-    private static final String OUTPUT_IMAGE_JPG  = "output_image.jpg";
+    private static final String TAG = "AnalysePresenterCompl";
+    public static final int TYPE_PICK_CAMERA = 0;
+    public static final int TYPE_PICK_GALLERY = 1;
+    private static final String OUTPUT_IMAGE_JPG = "output_image.jpg";
     private static final String OUTPUT_IMAGE_SMALL_JPG = "output_image_small.jpg";
     IPhotoView iPhotoView;
-    File       appBaseDir;
+    File appBaseDir;
     private Uri imageUri;
     private AsyncHttpClient asyncHttpClient;
 
@@ -66,7 +70,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
 
     @Override
     public void pickPhoto(Activity activity, int type) {
-        File  outputImage;
+        File outputImage;
         switch (type) {
             case TYPE_PICK_CAMERA:
                 Intent takePicture = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -106,7 +110,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
                     try {
                         activity.startActivityForResult(pickPhoto, MainActivity.ACTIVITY_REQUEST_GALLERY);
                     } catch (Throwable t) {
-                    	t.printStackTrace();
+                        t.printStackTrace();
                         iPhotoView.toast(activity.getResources().getString(R.string.main_pick_gallery_fail));
                     }
                 }
@@ -126,20 +130,20 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
             int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
             int heightMax = iPhotoView.getPhotoContainer().getHeight() - (context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
             if (widthBitmap > widthMax && heightBitmap > heightMax) {
-                float rateWidth = (float)widthBitmap/(float)widthMax;
-	            float rateHeight = (float)heightBitmap/(float)heightMax;
-	            if (rateWidth>=rateHeight)
-		            bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
-	            else
-		            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
-            }else if (widthBitmap > widthMax){
-	            bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
-            }else if(heightBitmap>heightMax){
-	            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+                float rateWidth = (float) widthBitmap / (float) widthMax;
+                float rateHeight = (float) heightBitmap / (float) heightMax;
+                if (rateWidth >= rateHeight)
+                    bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+                else
+                    bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+            } else if (widthBitmap > widthMax) {
+                bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+            } else if (heightBitmap > heightMax) {
+                bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
             String imgPath = appBaseDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_SMALL_JPG;
-	        if (BitmapUtil.saveBitmapToSd(bitmap,80,imgPath))
-		        iPhotoView.onGetImage(bitmap, imgPath);
+            if (BitmapUtil.saveBitmapToSd(bitmap, 80, imgPath))
+                iPhotoView.onGetImage(bitmap, imgPath);
         } catch (Exception e) {
             iPhotoView.toast(context.getResources().getString(R.string.main_get_img_fail));
             e.printStackTrace();
@@ -149,7 +153,7 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     private void postRequest(String imagePath) {
         iPhotoView.showProgressDialog(true);
         try {
-            if (asyncHttpClient==null)asyncHttpClient = new AsyncHttpClient();
+            if (asyncHttpClient == null) asyncHttpClient = new AsyncHttpClient();
             RequestParams params = new RequestParams();
             params.put("data", new File(imagePath)); // Upload a File
             //params.put("data", new Base64InputStream(new FileInputStream(imagePath),Base64.DEFAULT)); // Upload a File

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.widget;
 
 import android.content.Context;
@@ -15,7 +19,7 @@ import me.kaede.howoldrobot.analyse.model.Face;
 /**
  * Created by kaede on 2015/5/23.
  */
-public class FaceImageView extends ImageView{
+public class FaceImageView extends ImageView {
     private static final String TAG = "FaceImageView";
     Boolean isDrawFace = false;
     List<Face> faces;
@@ -38,7 +42,7 @@ public class FaceImageView extends ImageView{
         init();
     }
 
-    private void init(){
+    private void init() {
         this.isDrawFace = false;
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
@@ -55,24 +59,24 @@ public class FaceImageView extends ImageView{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (isDrawFace&&faces!=null){
+        if (isDrawFace && faces != null) {
             Iterator<Face> iterator = faces.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Face item = iterator.next();
                 //draw rect
-                canvas.drawRect(item.faceRectangle.left,item.faceRectangle.top,item.faceRectangle.left+item.faceRectangle.width,item.faceRectangle.top+item.faceRectangle.height, paint);
+                canvas.drawRect(item.faceRectangle.left, item.faceRectangle.top, item.faceRectangle.left + item.faceRectangle.width, item.faceRectangle.top + item.faceRectangle.height, paint);
             }
 
         }
     }
 
-    public void drawFaces( List<Face> faces){
+    public void drawFaces(List<Face> faces) {
         this.faces = faces;
         this.isDrawFace = true;
         invalidate();
     }
 
-    public void clearFaces(){
+    public void clearFaces() {
         this.faces = null;
         this.isDrawFace = false;
         invalidate();

@@ -1,8 +1,20 @@
+<!--
+  ~ Copyright (c) 2016. Kaede
+  -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_web" android:title="@string/action_web" android:icon="@drawable/icon_search"
-        android:orderInCategory="99" app:showAsAction="ifRoom" />
-    <item android:id="@+id/action_star" android:title="@string/action_star"
-        android:orderInCategory="100" app:showAsAction="collapseActionView" />
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_web"
+        android:title="@string/action_web"
+        android:icon="@drawable/icon_search"
+        android:orderInCategory="99"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_star"
+        android:title="@string/action_star"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView"/>
 </menu>

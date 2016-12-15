@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.analyse.model;
 
-public class FaceRectangle{
+public class FaceRectangle {
     public int left;
     public int top;
     public int width;

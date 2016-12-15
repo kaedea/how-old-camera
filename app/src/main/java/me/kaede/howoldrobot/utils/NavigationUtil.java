@@ -1,4 +1,8 @@
-package me.kaede.howoldrobot.util;
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
+package me.kaede.howoldrobot.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +20,8 @@ public class NavigationUtil {
             context.startActivity(it);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "找不到安卓市场", Toast.LENGTH_LONG).show();;
+            Toast.makeText(context, "找不到安卓市场", Toast.LENGTH_LONG).show();
+            ;
         }
     }
 

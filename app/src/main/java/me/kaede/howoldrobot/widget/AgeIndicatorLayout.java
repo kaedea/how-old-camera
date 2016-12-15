@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. Kaede
+ */
+
 package me.kaede.howoldrobot.widget;
 
 import android.content.Context;
@@ -12,12 +16,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import me.kaede.howoldrobot.R;
-import me.kaede.howoldrobot.analyse.model.Face;
-import me.kaede.howoldrobot.util.BitmapUtil;
 
 import java.util.Iterator;
 import java.util.List;
+
+import me.kaede.howoldrobot.R;
+import me.kaede.howoldrobot.analyse.model.Face;
+import me.kaede.howoldrobot.utils.BitmapUtil;
 
 /**
  * Created by kaede on 2015/5/23.
@@ -30,12 +35,13 @@ public class AgeIndicatorLayout extends LinearLayout {
     private int xOffset;
     private int yOffset;
 
-    private void init(){
+    private void init() {
         this.isDrawFace = false;
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.WHITE);
     }
+
     public AgeIndicatorLayout(Context context) {
         super(context);
         init();
@@ -55,25 +61,25 @@ public class AgeIndicatorLayout extends LinearLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (isDrawFace&&faces!=null){
+        if (isDrawFace && faces != null) {
             Iterator<Face> iterator = faces.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Face item = iterator.next();
                 //draw age indicator
                 View ageIndicateView = LayoutInflater.from(getContext().getApplicationContext()).inflate(R.layout.item_age_indicator, null);
-                if (ageIndicateView!=null){
+                if (ageIndicateView != null) {
                     TextView tvAge = (TextView) ageIndicateView.findViewById(R.id.tv_ageindicator_age);
                     tvAge.setText(String.valueOf(item.attributes.age));
                     ImageView ivGender = (ImageView) ageIndicateView.findViewById(R.id.iv_ageindicator_gender);
-                    if (item.attributes.gender.equalsIgnoreCase("Male")){
+                    if (item.attributes.gender.equalsIgnoreCase("Male")) {
                         ivGender.setImageResource(R.drawable.icon_gende_male);
-                    }else if(item.attributes.gender.equalsIgnoreCase("Female")){
+                    } else if (item.attributes.gender.equalsIgnoreCase("Female")) {
                         ivGender.setImageResource(R.drawable.icon_gender_female);
                     }
-                    Bitmap bitmap = BitmapUtil.getBitmapFromView(ageIndicateView,true);
+                    Bitmap bitmap = BitmapUtil.getBitmapFromView(ageIndicateView, true);
                     if (bitmap != null) {
-                       //BitmapUtil.saveBitmapToSd(bitmap, 100, Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "temp.jpg");
-                        canvas.drawBitmap(bitmap,item.faceRectangle.left+xOffset - (ageIndicateView.getMeasuredWidth() - item.faceRectangle.width)/2,item.faceRectangle.top+yOffset-bitmap.getHeight(),paint);
+                        //BitmapUtil.saveBitmapToSd(bitmap, 100, Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "temp.jpg");
+                        canvas.drawBitmap(bitmap, item.faceRectangle.left + xOffset - (ageIndicateView.getMeasuredWidth() - item.faceRectangle.width) / 2, item.faceRectangle.top + yOffset - bitmap.getHeight(), paint);
                     }
                     Log.i(TAG, "ageIndicateView getMeasuredHeight()= " + ageIndicateView.getMeasuredHeight() + " getHeight=" + ageIndicateView.getHeight());
 
@@ -84,7 +90,7 @@ public class AgeIndicatorLayout extends LinearLayout {
     }
 
 
-    public void drawAges( List<Face> faces,int xOffset,int yOffset){
+    public void drawAges(List<Face> faces, int xOffset, int yOffset) {
         this.faces = faces;
         this.isDrawFace = true;
         this.xOffset = xOffset;
@@ -92,7 +98,7 @@ public class AgeIndicatorLayout extends LinearLayout {
         invalidate();
     }
 
-    public void clearAges(){
+    public void clearAges() {
         this.faces = null;
         this.isDrawFace = false;
         invalidate();
