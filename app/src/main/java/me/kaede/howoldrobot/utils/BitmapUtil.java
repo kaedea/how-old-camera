@@ -23,9 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by kaede on 2015/5/24.
- */
 public class BitmapUtil {
 
     private static final String TAG = "BitmapUtil";

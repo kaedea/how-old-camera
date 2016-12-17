@@ -2,12 +2,12 @@
  * Copyright (c) 2016. Kaede
  */
 
-package me.kaede.howoldrobot.analyse.activity;
+package me.kaede.howoldrobot.analyse;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,16 +20,11 @@ import java.util.List;
 
 import me.kaede.howoldrobot.R;
 import me.kaede.howoldrobot.analyse.model.Face;
-import me.kaede.howoldrobot.analyse.presenter.AnalysePresenterCompl;
-import me.kaede.howoldrobot.analyse.presenter.AnimationPresenterCompl;
-import me.kaede.howoldrobot.analyse.presenter.DrawPresenterCompl;
 import me.kaede.howoldrobot.analyse.presenter.IAnalysePresenter;
 import me.kaede.howoldrobot.analyse.presenter.IAnimationPresenter;
 import me.kaede.howoldrobot.analyse.presenter.IDrawPresenter;
 import me.kaede.howoldrobot.analyse.presenter.IOptionsPresenter;
 import me.kaede.howoldrobot.analyse.presenter.ISharePresenter;
-import me.kaede.howoldrobot.analyse.presenter.OptionsPresenterCompl;
-import me.kaede.howoldrobot.analyse.presenter.SharePresenterCompl;
 import me.kaede.howoldrobot.analyse.view.IPhotoView;
 import me.kaede.howoldrobot.widget.AgeIndicatorLayout;
 import me.kaede.howoldrobot.widget.FaceImageView;
@@ -59,9 +54,9 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
 
     private void injectView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        faceImageView = (FaceImageView) this.findViewById(R.id.iv_main_face);
-        ageIndicatorLayout = (AgeIndicatorLayout) this.findViewById(R.id.layout_main_age);
-        photoContainer = this.findViewById(R.id.layout_main_photo);
+        faceImageView = (FaceImageView) findViewById(R.id.iv_main_face);
+        ageIndicatorLayout = (AgeIndicatorLayout) findViewById(R.id.layout_main_age);
+        photoContainer = findViewById(R.id.layout_main_photo);
     }
 
     private void setListener() {
@@ -73,13 +68,12 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     private void init() {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getResources().getString(R.string.app_name));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbar.setElevation(0);
-        }
-
-        analysePresenter = new AnalysePresenterCompl(this);
-        drawPresenter = new DrawPresenterCompl(this, this);
-        IAnimationPresenter animationPresenter = new AnimationPresenterCompl();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            mToolbar.setElevation(0);
+//        }
+        analysePresenter = new AnalyseImpl(this);
+        drawPresenter = new DrawImpl(this);
+        IAnimationPresenter animationPresenter = new AnimationImpl();
         animationPresenter.doLogoAnimation(findViewById(R.id.iv_main_introduce_logo));
         animationPresenter.doIntroduceAnimation(findViewById(R.id.layout_main_introduce_text));
     }
@@ -137,6 +131,11 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     }
 
     @Override
+    public Context getContext() {
+        return getApplicationContext();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
@@ -144,23 +143,22 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        IOptionsPresenter optionsPresenter = new OptionsPresenterCompl();
+        IOptionsPresenter optionsPresenter = new OptionsImpl();
         optionsPresenter.onOptionsItemClick(this, item.getItemId());
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.btn_main_camera:
-                analysePresenter.pickPhoto(this, AnalysePresenterCompl.TYPE_PICK_CAMERA);
+                analysePresenter.pickPhoto(this, AnalyseImpl.TYPE_PICK_CAMERA);
                 break;
             case R.id.btn_main_gallery:
-                analysePresenter.pickPhoto(this, AnalysePresenterCompl.TYPE_PICK_GALLERY);
+                analysePresenter.pickPhoto(this, AnalyseImpl.TYPE_PICK_GALLERY);
                 break;
             case R.id.btn_main_share:
-                ISharePresenter sharePresenter = new SharePresenterCompl(this);
+                ISharePresenter sharePresenter = new ShareImpl(this);
                 sharePresenter.doShare(this, this.findViewById(android.R.id.content));
                 break;
             default:

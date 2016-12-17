@@ -8,9 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-/**
- * Created by kaede on 2015/5/23.
- */
 public interface IAnalysePresenter {
     public void doAnalyse(String imgPath);
 

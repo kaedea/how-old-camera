@@ -4,6 +4,7 @@
 
 package me.kaede.howoldrobot.analyse.view;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 
@@ -15,13 +16,16 @@ import me.kaede.howoldrobot.analyse.model.Face;
  * Created by kaede on 2015/5/23.
  */
 public interface IPhotoView {
-    public void onGetFaces(List<Face> faces);
 
-    public void onGetImage(Bitmap bitmap, String imgPath);
+    void onGetFaces(List<Face> faces);
 
-    public void showProgressDialog(Boolean isShow);
+    void onGetImage(Bitmap bitmap, String imgPath);
 
-    public void toast(String msg);
+    void showProgressDialog(Boolean isShow);
 
-    public View getPhotoContainer();
+    void toast(String msg);
+
+    View getPhotoContainer();
+
+    Context getContext();
 }

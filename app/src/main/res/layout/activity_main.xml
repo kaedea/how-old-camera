@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:background="#DDD"
     android:orientation="vertical"
-    tools:context=".analyse.activity.MainActivity">
+    tools:context=".analyse.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

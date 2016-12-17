@@ -2,7 +2,7 @@
  * Copyright (c) 2016. Kaede
  */
 
-package me.kaede.howoldrobot.analyse.presenter;
+package me.kaede.howoldrobot.analyse;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,28 +28,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.kaede.howoldrobot.R;
-import me.kaede.howoldrobot.analyse.activity.MainActivity;
 import me.kaede.howoldrobot.analyse.model.Face;
+import me.kaede.howoldrobot.analyse.presenter.IAnalysePresenter;
 import me.kaede.howoldrobot.analyse.view.IPhotoView;
-import me.kaede.howoldrobot.utils.AppUtil;
 import me.kaede.howoldrobot.utils.BitmapUtil;
+import me.kaede.howoldrobot.utils.DeviceUtil;
 import me.kaede.howoldrobot.utils.FileUtil;
 
-/**
- * Created by kaede on 2015/5/23.
- */
-public class AnalysePresenterCompl implements IAnalysePresenter {
-    private static final String TAG = "AnalysePresenterCompl";
-    public static final int TYPE_PICK_CAMERA = 0;
-    public static final int TYPE_PICK_GALLERY = 1;
+class AnalyseImpl implements IAnalysePresenter {
+
+    private static final String TAG = "age.analyse";
+
+    static final int TYPE_PICK_CAMERA = 0;
+    static final int TYPE_PICK_GALLERY = 1;
+
     private static final String OUTPUT_IMAGE_JPG = "output_image.jpg";
     private static final String OUTPUT_IMAGE_SMALL_JPG = "output_image_small.jpg";
+
     IPhotoView iPhotoView;
     File appBaseDir;
     private Uri imageUri;
     private AsyncHttpClient asyncHttpClient;
 
-    public AnalysePresenterCompl(IPhotoView iPhotoView) {
+    public AnalyseImpl(IPhotoView iPhotoView) {
         this.iPhotoView = iPhotoView;
         File dir = new File(FileUtil.getSdpath() + File.separator + "Moe Studio");
         dir.mkdir();
@@ -123,12 +124,14 @@ public class AnalysePresenterCompl implements IAnalysePresenter {
     @Override
     public void getImage(Context context, Intent intent) {
         try {
-            Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(imageUri));
+            Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver()
+                    .openInputStream(imageUri));
             //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
             int widthBitmap = bitmap.getWidth();
             int heightBitmap = bitmap.getHeight();
-            int widthMax = AppUtil.getScreenWitdh(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
+            int widthMax = DeviceUtil.getScreenWidth(context) - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left) + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
             int heightMax = iPhotoView.getPhotoContainer().getHeight() - (context.getResources().getDimensionPixelSize(R.dimen.border_main_photo) + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
+
             if (widthBitmap > widthMax && heightBitmap > heightMax) {
                 float rateWidth = (float) widthBitmap / (float) widthMax;
                 float rateHeight = (float) heightBitmap / (float) heightMax;
