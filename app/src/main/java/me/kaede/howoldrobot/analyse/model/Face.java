@@ -4,9 +4,6 @@
 
 package me.kaede.howoldrobot.analyse.model;
 
-/**
- * Created by kaede on 2015/5/23.
- */
 public class Face {
     public int faceId;
     public FaceRectangle faceRectangle;

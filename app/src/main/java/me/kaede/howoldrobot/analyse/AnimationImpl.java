@@ -9,9 +9,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 
-import me.kaede.howoldrobot.analyse.presenter.IAnimationPresenter;
+import me.kaede.howoldrobot.analyse.presenter.IAnimation;
 
-class AnimationImpl implements IAnimationPresenter {
+class AnimationImpl implements IAnimation {
 
     @Override
     public void doLogoAnimation(View view) {

@@ -13,7 +13,7 @@ import me.kaede.howoldrobot.widget.FaceImageView;
 /**
  * Created by kaede on 2015/5/24.
  */
-public interface IDrawPresenter {
+public interface IDraw {
     public void drawFaces(AgeIndicatorLayout ageIndicatorLayout, FaceImageView faceImageView, List<Face> faces);
 
     public void clearViews();

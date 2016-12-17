@@ -12,17 +12,17 @@ import android.util.DisplayMetrics;
 
 public class DeviceUtil {
 
-    public static int getScreenWidth(Context context) {
+    public static int width(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return dm.widthPixels;
     }
 
-    public static int getScreenHeight(Context context) {
+    public static int height(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return dm.heightPixels;
     }
 
-    public static String getPackageName(Context context) {
+    public static String packageName(Context context) {
         return context.getPackageName();
     }
 }

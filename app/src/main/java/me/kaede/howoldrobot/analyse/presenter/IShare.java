@@ -7,6 +7,6 @@ package me.kaede.howoldrobot.analyse.presenter;
 import android.content.Context;
 import android.view.View;
 
-public interface ISharePresenter {
+public interface IShare {
     void doShare(Context context, View view);
 }

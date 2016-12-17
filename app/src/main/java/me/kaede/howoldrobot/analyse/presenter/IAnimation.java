@@ -6,7 +6,7 @@ package me.kaede.howoldrobot.analyse.presenter;
 
 import android.view.View;
 
-public interface IAnimationPresenter {
+public interface IAnimation {
 
     void doLogoAnimation(View view);
 

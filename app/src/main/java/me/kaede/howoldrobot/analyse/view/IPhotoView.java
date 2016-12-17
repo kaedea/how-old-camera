@@ -12,9 +12,6 @@ import java.util.List;
 
 import me.kaede.howoldrobot.analyse.model.Face;
 
-/**
- * Created by kaede on 2015/5/23.
- */
 public interface IPhotoView {
 
     void onGetFaces(List<Face> faces);
@@ -25,7 +22,7 @@ public interface IPhotoView {
 
     void toast(String msg);
 
-    View getPhotoContainer();
+    View getContainer();
 
     Context getContext();
 }

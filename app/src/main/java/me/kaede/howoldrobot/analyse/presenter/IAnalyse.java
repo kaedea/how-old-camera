@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-public interface IAnalysePresenter {
+public interface IAnalyse {
     public void doAnalyse(String imgPath);
 
     public void pickPhoto(Activity activity, int type);
