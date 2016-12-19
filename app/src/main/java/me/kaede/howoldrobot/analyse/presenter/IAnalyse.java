@@ -9,9 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 
 public interface IAnalyse {
-    public void doAnalyse(String imgPath);
+    void pickPhoto(Activity activity, int type);
 
-    public void pickPhoto(Activity activity, int type);
+    void getImage(Context context, Intent intent);
 
-    public void getImage(Context context, Intent intent);
+    void doAnalyse(String imgPath);
 }
