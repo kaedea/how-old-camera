@@ -4,9 +4,14 @@
 
 package me.kaede.howoldrobot.analyse.presenter;
 
-import android.content.Context;
+import android.support.annotation.WorkerThread;
 import android.view.View;
 
 public interface IShare {
-    void doShare(Context context, View view);
+    @WorkerThread
+    String save(View view) throws Exception;
+
+    void doShare(View view);
+
+    void doShare(String imgPath);
 }

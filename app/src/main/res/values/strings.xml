@@ -6,7 +6,7 @@
     <string name="app_name">How Old You Look</string>
     <string name="app_label">HOW OLD</string>
 
-    <string name="main_loading">Analysing…</string>
+    <string name="main_loading">Analysing Photo …</string>
     <string name="main_pick_camera_fail">Open camera fail</string>
     <string name="main_pick_gallery_fail">Pick photo fail</string>
     <string name="main_get_img_fail">Get image fail</string>

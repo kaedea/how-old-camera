@@ -8,4 +8,8 @@ import android.app.Application;
 
 public class RobotApplication extends Application {
 
+    @Override
+    public void onCreate() {
+        Dispatcher.instance().start();
+    }
 }

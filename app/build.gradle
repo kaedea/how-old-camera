@@ -13,8 +13,8 @@ android {
         applicationId "me.kaede.howoldrobot"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 301
-        versionName "0.3.1"
+        versionCode 10000
+        versionName "1.0.0"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
         multiDexEnabled false
     }
@@ -31,7 +31,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-    buildToolsVersion '25'
 }
 
 dependencies {

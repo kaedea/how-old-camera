@@ -18,7 +18,7 @@ public interface IPhotoView {
 
     void onGetImage(Bitmap bitmap, String imgPath);
 
-    void showProgressDialog(Boolean isShow);
+    void showProgressDialog(Boolean isShow, String msg);
 
     void toast(String msg);
 

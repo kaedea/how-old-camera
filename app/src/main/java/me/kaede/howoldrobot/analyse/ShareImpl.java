@@ -6,58 +6,116 @@ package me.kaede.howoldrobot.analyse;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.support.annotation.WorkerThread;
+import android.text.TextUtils;
 import android.view.View;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
+import me.kaede.howoldrobot.Dispatcher;
 import me.kaede.howoldrobot.R;
 import me.kaede.howoldrobot.analyse.presenter.IShare;
 import me.kaede.howoldrobot.analyse.view.IPhotoView;
 import me.kaede.howoldrobot.utils.BitmapUtil;
+import me.kaede.howoldrobot.utils.FileUtil;
 
 class ShareImpl implements IShare {
 
     private IPhotoView mPhotoView;
-    private final File mCacheDir;
+    private final File mShareDir;
+    private final Handler mHandler;
 
     public ShareImpl(IPhotoView photoView) {
         mPhotoView = photoView;
-        File cacheDir = mPhotoView.getContext().getExternalCacheDir();
-        if (cacheDir == null) {
-            cacheDir = mPhotoView.getContext().getCacheDir();
+        mHandler = new Handler(Looper.getMainLooper());
+        File fileDir = mPhotoView.getContext().getExternalFilesDir("");
+        if (fileDir == null) {
+            fileDir = mPhotoView.getContext().getFilesDir();
         }
-        mCacheDir = cacheDir;
+        mShareDir = new File(fileDir, "share");
+        try {
+            FileUtil.checkCreateDir(mShareDir);
+        } catch (IOException e) {
+            Logger.w(e);
+        }
     }
 
     @Override
-    public void doShare(Context context, View view) {
-        Bitmap bitmap = BitmapUtil.getViewBitmap(view);
+    @WorkerThread
+    public String save(View view) throws Exception {
+        Bitmap bitmap = BitmapUtil.getBitmapFromView(view);
         if (bitmap != null) {
-//            File temp = File.createTempFile("how_old_", "_share.jpg", mCacheDir);
-//            BitmapUtil.saveBitmapToSd(bitmap, 80, temp.getAbsolutePath());
-            shareBitmap(context, bitmap);
+            File shareImage = File.createTempFile("age_", "_share.jpg", mShareDir);
+            String shareImgPath = shareImage.getAbsolutePath();
+            BitmapUtil.saveBitmap(bitmap, 80, shareImgPath);
+            return shareImgPath;
         }
+        throw new Exception("Can not get bitmap from view.");
     }
 
-    private void shareBitmap(Context context, Bitmap bitmap) {
+    @Override
+    public void doShare(final View view) {
+        final Bitmap bitmap = BitmapUtil.getBitmapFromView(view);
+        if (bitmap != null) {
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    try {
+                        File shareImage = File.createTempFile("age_", "_share.jpg", mShareDir);
+                        final String shareImgPath = shareImage.getAbsolutePath();
+                        BitmapUtil.saveBitmap(bitmap, 80, shareImgPath);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                shareBitmap(view.getContext(), shareImgPath);
+                            }
+                        });
+
+                    } catch (IOException e) {
+                        Logger.w(e);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPhotoView.toast(view.getContext().getResources().getString(R.string.share_fail));
+                            }
+                        });
+                    }
+                }
+            };
+            Dispatcher.instance().post(runnable);
+            return;
+        }
+        mPhotoView.toast(view.getContext().getResources().getString(R.string.share_fail));
+    }
+
+    @Override
+    public void doShare(String imgPath) {
+        if (!TextUtils.isEmpty(imgPath)) {
+            shareBitmap(mPhotoView.getContext(), imgPath);
+            return;
+        }
+        mPhotoView.toast(mPhotoView.getContext().getResources().getString(R.string.share_fail));
+    }
+
+    private void shareBitmap(Context context, String imgPath) {
         try {
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("image/jpeg");
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), imgPath,
                     "Share Image", "How Old Camera's Share Image");
             Uri imageUri = Uri.parse(path);
             share.putExtra(Intent.EXTRA_STREAM, imageUri);
+            // Calling startActivity() from outside of an Activity.
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             context.startActivity(Intent.createChooser(share, context.getResources()
                     .getString(R.string.share_select_title)));
-        } catch (Resources.NotFoundException e) {
+        } catch (Throwable e) {
             Logger.w(e);
             mPhotoView.toast(context.getResources().getString(R.string.share_fail));
         }

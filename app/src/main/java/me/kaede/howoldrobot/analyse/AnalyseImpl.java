@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.kaede.howoldrobot.Dispatcher;
 import me.kaede.howoldrobot.R;
 import me.kaede.howoldrobot.analyse.model.Face;
 import me.kaede.howoldrobot.analyse.presenter.IAnalyse;
@@ -37,21 +38,17 @@ import me.kaede.howoldrobot.analyse.view.IPhotoView;
 import me.kaede.howoldrobot.utils.BitmapUtil;
 import me.kaede.howoldrobot.utils.DeviceUtil;
 import me.kaede.howoldrobot.utils.FileUtil;
-import moe.studio.dispatcher.SimpleDispatcher;
-import moe.studio.dispatcher.Task;
 
 class AnalyseImpl implements IAnalyse {
 
     static final int TYPE_PICK_CAMERA = 0;
     static final int TYPE_PICK_GALLERY = 1;
-
     private static final String OUTPUT_IMAGE_JPG = "output_image.jpg";
-    private static final String OUTPUT_IMAGE_SMALL_JPG = "output_image_small.jpg";
+    private static final String OUTPUT_IMAGE_SMALL = "output_image_small.jpg";
 
     private Uri imageUri;
     private File mCacheDir;
     private IPhotoView mPhotoView;
-    private final SimpleDispatcher mDispatcher;
     private final Handler mHandler;
 
     public AnalyseImpl(IPhotoView photoView) {
@@ -61,10 +58,7 @@ class AnalyseImpl implements IAnalyse {
             cacheDir = mPhotoView.getContext().getCacheDir();
         }
         mCacheDir = cacheDir;
-
         mHandler = new Handler(Looper.getMainLooper());
-        mDispatcher = Task.Dispatchers.newSimpleDispatcher();
-        mDispatcher.start();
     }
 
     @Override
@@ -74,7 +68,7 @@ class AnalyseImpl implements IAnalyse {
             case TYPE_PICK_CAMERA:
                 try {
                     Intent takePicture = new Intent("android.media.action.IMAGE_CAPTURE");
-                    outputImage = new File(mCacheDir.getAbsolutePath(), OUTPUT_IMAGE_JPG);
+                    outputImage = new File(mCacheDir, OUTPUT_IMAGE_JPG);
                     FileUtil.checkCreateFile(outputImage);
                     imageUri = Uri.fromFile(outputImage);
                     //takePicture.putExtra("return-data", false);
@@ -89,10 +83,9 @@ class AnalyseImpl implements IAnalyse {
 
             case TYPE_PICK_GALLERY:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-
                 try {
                     pickPhoto.putExtra("crop", "true");
-                    outputImage = new File(mCacheDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_JPG);
+                    outputImage = new File(mCacheDir, OUTPUT_IMAGE_JPG);
                     FileUtil.checkCreateFile(outputImage);
                     imageUri = Uri.fromFile(outputImage);
                     //takePicture.putExtra("return-data", false);
@@ -117,45 +110,63 @@ class AnalyseImpl implements IAnalyse {
     }
 
     @Override
-    public void getImage(Context context, Intent intent) {
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver()
-                    .openInputStream(imageUri));
+    public void getImage(final Context context, Intent intent) {
+        Dispatcher.instance().post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(context.getContentResolver()
+                            .openInputStream(imageUri));
 
-            //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-            int widthBitmap = bitmap.getWidth();
-            int heightBitmap = bitmap.getHeight();
+                    int widthBitmap = bitmap.getWidth();
+                    int heightBitmap = bitmap.getHeight();
 
-            int widthMax = DeviceUtil.width(context)
-                    - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left)
-                    + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)
-                    + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
-            int heightMax = mPhotoView.getContainer().getHeight()
-                    - (context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)
-                    + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
+                    int widthMax = DeviceUtil.width(context)
+                            - (context.getResources().getDimensionPixelSize(R.dimen.margin_main_left)
+                            + context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)
+                            + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
+                    int heightMax = mPhotoView.getContainer().getHeight()
+                            - (context.getResources().getDimensionPixelSize(R.dimen.border_main_photo)
+                            + context.getResources().getDimensionPixelSize(R.dimen.offset_main_photo)) * 2;
 
-            if (widthBitmap > widthMax && heightBitmap > heightMax) {
-                float rateWidth = (float) widthBitmap / (float) widthMax;
-                float rateHeight = (float) heightBitmap / (float) heightMax;
-                if (rateWidth >= rateHeight) {
-                    bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
-                } else {
-                    bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+                    if (widthBitmap > widthMax && heightBitmap > heightMax) {
+                        float rateWidth = (float) widthBitmap / (float) widthMax;
+                        float rateHeight = (float) heightBitmap / (float) heightMax;
+                        if (rateWidth >= rateHeight) {
+                            bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+                        } else {
+                            bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+                        }
+                    } else if (widthBitmap > widthMax) {
+                        bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
+                    } else if (heightBitmap > heightMax) {
+                        bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
+                    }
+
+                    File smallImage = new File(mCacheDir, OUTPUT_IMAGE_SMALL);
+                    final String imgPath = smallImage.getAbsolutePath();
+                    final Bitmap finalBitmap = bitmap;
+
+                    if (BitmapUtil.saveBitmap(finalBitmap, 80, imgPath)) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPhotoView.onGetImage(finalBitmap, imgPath);
+                            }
+                        });
+                    }
+
+                } catch (Exception e) {
+                    Logger.w(e);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPhotoView.toast(context.getResources().getString(R.string.main_get_img_fail));
+                        }
+                    });
                 }
-            } else if (widthBitmap > widthMax) {
-                bitmap = BitmapUtil.zoomBitmapToWidth(bitmap, widthMax);
-            } else if (heightBitmap > heightMax) {
-                bitmap = BitmapUtil.zoomBitmapToHeight(bitmap, heightMax);
             }
-
-            String imgPath = mCacheDir.getAbsolutePath() + File.separator + OUTPUT_IMAGE_SMALL_JPG;
-            if (BitmapUtil.saveBitmapToSd(bitmap, 80, imgPath)) {
-                mPhotoView.onGetImage(bitmap, imgPath);
-            }
-        } catch (Exception e) {
-            mPhotoView.toast(context.getResources().getString(R.string.main_get_img_fail));
-            e.printStackTrace();
-        }
+        });
     }
 
     @Override
@@ -163,14 +174,14 @@ class AnalyseImpl implements IAnalyse {
         File image = new File(imgPath);
         if (!image.exists()) {
             Logger.w("Image Not Exists!");
+            mPhotoView.onGetFaces(null);
             return;
         }
         requestAges(image);
     }
 
     void requestAges(final File image) {
-        mPhotoView.showProgressDialog(true);
-        mDispatcher.post(new Runnable() {
+        Dispatcher.instance().post(new Runnable() {
             @Override
             public void run() {
                 try {
