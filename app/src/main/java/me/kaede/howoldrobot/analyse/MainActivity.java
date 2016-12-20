@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     private String mShareImgPath;
     private IShare mShare;
     private File mShareDir;
+    private View mCameraBtn;
+    private View mGalleryBtn;
+    private View mShareBtn;
+    private View mBorder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +87,26 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
         mAgeLayout = (AgeIndicatorLayout) findViewById(R.id.layout_main_age);
         mContainer = findViewById(R.id.layout_main_photo);
         mIntroduceView = findViewById(R.id.layout_introduce);
+        mCameraBtn = findViewById(R.id.btn_main_camera);
+        mGalleryBtn = findViewById(R.id.btn_main_gallery);
+        mShareBtn = findViewById(R.id.btn_main_share);
+        mBorder = findViewById(R.id.layout_main_border);
 
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getResources().getString(R.string.app_name));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mToolbar.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
+            mCameraBtn.setElevation(getResources().getDimension(R.dimen.btn_elevation));
+            mGalleryBtn.setElevation(getResources().getDimension(R.dimen.btn_elevation));
+            mShareBtn.setElevation(getResources().getDimension(R.dimen.btn_elevation));
         }
     }
 
     private void setListener() {
-        findViewById(R.id.btn_main_camera).setOnClickListener(this);
-        findViewById(R.id.btn_main_gallery).setOnClickListener(this);
-        findViewById(R.id.btn_main_share).setOnClickListener(this);
+        mCameraBtn.setOnClickListener(this);
+        mGalleryBtn.setOnClickListener(this);
+        mShareBtn.setOnClickListener(this);
     }
 
     private void init() {
@@ -158,7 +170,11 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
         mFaceView.clearFaces();
         mAgeLayout.clearAges();
         mFaceView.setImageBitmap(bitmap);
-        findViewById(R.id.layout_main_border).setBackgroundResource(R.color.orange_500);
+        mBorder.setBackgroundResource(R.drawable.shape_bg_photo);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBorder.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
+        }
 
         showProgressDialog(true, getResources().getString(R.string.main_loading));
         mAnalyse.doAnalyse(imgPath);

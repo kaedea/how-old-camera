@@ -3,35 +3,42 @@
   ~ Copyright (c) 2016. Kaede
   -->
 
-<me.kaede.howoldrobot.widget.AgeIndicatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                android:orientation="horizontal"
-                                                android:layout_width="wrap_content"
-                                                android:gravity="center"
-                                                android:layout_height="wrap_content"
-                                                android:background="@drawable/bg_indicator"
+<me.kaede.howoldrobot.widget.AgeIndicatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/indicator_width"
+    android:layout_height="@dimen/indicator_height"
+    android:background="@drawable/bg_indicator"
+    android:gravity="center"
+    android:orientation="horizontal"
     >
 
     <LinearLayout
-        android:paddingBottom="5dp"
         android:layout_width="@dimen/indicator_width"
         android:layout_height="@dimen/indicator_height"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
-            android:id="@+id/iv_ageindicator_gender"
-            android:src="@drawable/icon_gender_female"
+            android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/icon_gender_female"
+            tools:ignore="ContentDescription"/>
 
         <TextView
-            android:id="@+id/tv_ageindicator_age"
-            android:layout_marginLeft="8dp"
-            android:layout_gravity="center"
-            android:textSize="22sp"
-            android:text="17"
-            android:textColor="@android:color/white"
+            android:id="@+id/tv_age"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="6dp"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            tools:ignore="RtlHardcoded"
+            tools:text="17"/>
     </LinearLayout>
 
 </me.kaede.howoldrobot.widget.AgeIndicatorLayout>
