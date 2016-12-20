@@ -3,7 +3,7 @@
   ~ Copyright (c) 2016. Kaede
   -->
 
-<me.kaede.howoldrobot.widget.AgeIndicatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/indicator_width"
@@ -41,4 +41,4 @@
             tools:text="17"/>
     </LinearLayout>
 
-</me.kaede.howoldrobot.widget.AgeIndicatorLayout>
+</LinearLayout>

@@ -87,19 +87,20 @@ public class AgeIndicatorLayout extends LinearLayout {
                     }
 
                     ViewCompat.setBackground(ageIndicateView, drawable);
-
                     Bitmap bitmap = BitmapUtil.getBitmapFromView(ageIndicateView, true);
-                    if (bitmap != null) {
-                        // BitmapUtil.saveBitmapToSd(bitmap, 100, Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "temp.jpg");
-                        canvas.drawBitmap(bitmap, item.faceRectangle.left + xOffset - (ageIndicateView.getMeasuredWidth() - item.faceRectangle.width) / 2,
-                                item.faceRectangle.top + yOffset - bitmap.getHeight(), mPaint);
-                    }
-                    Log.i(TAG, "ageIndicateView getMeasuredHeight()= " + ageIndicateView.getMeasuredHeight()
-                            + ", getHeight=" + ageIndicateView.getHeight());
 
+                    if (bitmap != null) {
+                        Log.d(TAG, "ageIndicateView getMeasuredHeight() = " + ageIndicateView.getMeasuredHeight()
+                                + ", getHeight = " + ageIndicateView.getHeight());
+                        int left = item.faceRectangle.left + xOffset - (ageIndicateView.getMeasuredWidth()
+                                - item.faceRectangle.width) / 2;
+                        int top = item.faceRectangle.top + yOffset - bitmap.getHeight();
+                        canvas.drawBitmap(bitmap, left, top, mPaint);
+                    } else {
+                        Log.w(TAG, "Can not get bitmap from ageIndicateView.");
+                    }
                 }
             }
-
         }
     }
 

@@ -16,9 +16,7 @@ import java.util.List;
 
 import me.kaede.howoldrobot.analyse.model.Face;
 
-/**
- * Created by kaede on 2015/5/23.
- */
+
 public class FaceImageView extends ImageView {
     private static final String TAG = "FaceImageView";
     Boolean isDrawFace = false;
@@ -60,11 +58,11 @@ public class FaceImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (isDrawFace && faces != null) {
-            Iterator<Face> iterator = faces.iterator();
-            while (iterator.hasNext()) {
-                Face item = iterator.next();
+            for (Face item : faces) {
                 //draw rect
-                canvas.drawRect(item.faceRectangle.left, item.faceRectangle.top, item.faceRectangle.left + item.faceRectangle.width, item.faceRectangle.top + item.faceRectangle.height, paint);
+                canvas.drawRect(item.faceRectangle.left, item.faceRectangle.top,
+                        item.faceRectangle.left + item.faceRectangle.width,
+                        item.faceRectangle.top + item.faceRectangle.height, paint);
             }
 
         }

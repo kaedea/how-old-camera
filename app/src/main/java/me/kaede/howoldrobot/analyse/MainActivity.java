@@ -52,12 +52,17 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     static final int ACTIVITY_REQUEST_GALLERY = 1;
     private static final int REQ_PERMISSION_WRITE = 233;
 
-    private Toolbar mToolbar;
+
     private View mContainer;
+    private View mIntroduceView;
+    private View mCameraBtn;
+    private View mGalleryBtn;
+    private View mShareBtn;
+    private View mBorder;
+    private Toolbar mToolbar;
     private FaceImageView mFaceView;
     private ProgressDialog mProgress;
     private AgeIndicatorLayout mAgeLayout;
-    private View mIntroduceView;
 
     private Context mContext;
     private Handler mHandler;
@@ -67,10 +72,9 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     private String mShareImgPath;
     private IShare mShare;
     private File mShareDir;
-    private View mCameraBtn;
-    private View mGalleryBtn;
-    private View mShareBtn;
-    private View mBorder;
+    private boolean mIsTimeOut;
+    private Runnable mCancelTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,10 +132,19 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
         mAnimation = new AnimationImpl();
         mShare = new ShareImpl(this);
         mAnimation.doLogoAnimation(findViewById(R.id.iv_logo));
+        mCancelTask = new Runnable() {
+            @Override
+            public void run() {
+                showProgressDialog(false, null);
+                mIsTimeOut = true;
+                toast("Timeout, please retry");
+            }
+        };
     }
 
     private void share() {
         if (!TextUtils.isEmpty(mShareImgPath)) {
+            showProgressDialog();
             mShare.doShare(mShareImgPath);
         } else {
             showProgressDialog(true, "Compress image ...");
@@ -152,16 +165,41 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
                     } catch (Exception e) {
                         Logger.w(e);
                     } finally {
-                        mHandler.post(new Runnable() {
+                        mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 showProgressDialog(false, null);
                             }
-                        });
+                        }, 2000);
                     }
                 }
             });
         }
+    }
+
+    public void showProgressDialog() {
+        if (mProgress == null) {
+            mProgress = new ProgressDialog(this);
+            mProgress.setIndeterminate(true);
+        }
+
+        if (mProgress.isShowing()) {
+            return;
+        }
+
+        mProgress.setCancelable(true);
+        mProgress.setCanceledOnTouchOutside(true);
+        mProgress.setMessage("Waiting ...");
+        mProgress.show();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgress.isShowing()) {
+                    mProgress.dismiss();
+                }
+            }
+        }, 2000);
     }
 
     @Override
@@ -172,16 +210,19 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
         mFaceView.setImageBitmap(bitmap);
         mBorder.setBackgroundResource(R.drawable.shape_bg_photo);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBorder.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
-        }
-
         showProgressDialog(true, getResources().getString(R.string.main_loading));
+        mHandler.postDelayed(mCancelTask, 10000);
+        mIsTimeOut = false;
         mAnalyse.doAnalyse(imgPath);
     }
 
     @Override
     public void onGetFaces(List<Face> faces) {
+        mHandler.removeCallbacks(mCancelTask);
+        if (mIsTimeOut) {
+            return;
+        }
+
         if (faces == null) {
             toast(getResources().getString(R.string.main_analyze_fail));
             showProgressDialog(false, null);
@@ -224,16 +265,19 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
         if (mProgress == null) {
             mProgress = new ProgressDialog(this);
             mProgress.setIndeterminate(true);
-            mProgress.setCancelable(false);
-            mProgress.setCanceledOnTouchOutside(false);
-            if (TextUtils.isEmpty(msg)) {
-                mProgress.setMessage(msg);
-            }
+        }
+
+        mProgress.setCancelable(false);
+        mProgress.setCanceledOnTouchOutside(false);
+        if (TextUtils.isEmpty(msg)) {
+            mProgress.setMessage(msg);
         }
 
         if (isShow) {
-            if (!mProgress.isShowing())
-                mProgress.show();
+            if (mProgress.isShowing()) {
+                mProgress.dismiss();
+            }
+            mProgress.show();;
         } else {
             if (mProgress.isShowing())
                 mProgress.dismiss();
@@ -271,10 +315,12 @@ public class MainActivity extends AppCompatActivity implements IPhotoView, View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_main_camera:
+                showProgressDialog();
                 mAnalyse.pickPhoto(this, TYPE_PICK_CAMERA);
                 break;
 
             case R.id.btn_main_gallery:
+                showProgressDialog();
                 mAnalyse.pickPhoto(this, TYPE_PICK_GALLERY);
                 break;
 

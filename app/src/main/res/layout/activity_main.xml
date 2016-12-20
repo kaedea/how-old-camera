@@ -50,6 +50,7 @@
                 android:id="@+id/layout_main_age"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                tools:background="#33000000"
                 android:background="#00000000">
 
                 <LinearLayout

@@ -95,9 +95,6 @@ public class BitmapUtil {
     private static Bitmap getBitmapFromVisibleView(View view, Boolean useDrawingCache) {
         if (useDrawingCache) {
             view.setDrawingCacheEnabled(true);
-            if (Looper.myLooper() == Looper.getMainLooper()) {
-                view.invalidate();
-            }
             return view.getDrawingCache();
         }
 
